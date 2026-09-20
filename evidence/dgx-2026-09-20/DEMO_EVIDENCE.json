@@ -1,0 +1,22 @@
+{
+  "status": "pass",
+  "recorded_at": "2026-09-20T13:06:29.843874+00:00",
+  "source_commit": "3645a2f",
+  "hardware": "NVIDIA GB10",
+  "vllm_version": "0.22.1",
+  "endpoint": "http://127.0.0.1:8000/v1",
+  "model": "Qwen/Qwen3.6-35B-A3B",
+  "elapsed_seconds": 78,
+  "security": "pass",
+  "trigger_accuracy": 1.0,
+  "baseline_score": 0.236,
+  "skill_score": 1.0,
+  "improvement": 0.764,
+  "replay_contract": true,
+  "required_fields": [
+    "image_quality",
+    "sku_facings",
+    "empty_gaps",
+    "uncertainties"
+  ]
+}

@@ -96,3 +96,11 @@ Images are restricted to the declared input root. Endpoints are restricted to lo
 - `docs/ROADSHOW.md`: timed competition demo; `docs/COMPLETION_AUDIT.md`: honest requirement-by-requirement status.
 
 The two shelf images are synthetic, brandless evaluation assets generated specifically for this project. Their prompts, provenance, and hashes are recorded in `examples/retail-shelf-audit/ASSET_NOTES.md`; they are not presented as real store data.
+
+## Verified DGX result
+
+The archived competition-node run completed the live gated flow in 78 seconds
+after model readiness. Contract score improved from 23.6% to 100%, trigger
+accuracy was 100%, the security scan passed with zero findings, and the second
+image replay satisfied all required fields. Raw outputs, latencies, reports,
+and chain-of-custody details are preserved in `evidence/dgx-2026-09-20/`.

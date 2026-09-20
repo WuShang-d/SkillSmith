@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-image="${VLLM_IMAGE:-vllm/vllm-openai:v0.28.0}"
+if [[ -n "${VLLM_IMAGE:-}" ]]; then
+  image="$VLLM_IMAGE"
+elif docker image inspect vllm/vllm-openai:v0.28.0 >/dev/null 2>&1; then
+  image="vllm/vllm-openai:v0.28.0"
+elif docker image inspect vllm/vllm-openai:latest >/dev/null 2>&1; then
+  image="vllm/vllm-openai:latest"
+else
+  image="vllm/vllm-openai:v0.28.0"
+fi
 model_path="${MODEL_PATH:-/home/xsuper/models/Qwen3.6-35B-A3B}"
 served_name="${SERVED_MODEL_NAME:-Qwen/Qwen3.6-35B-A3B}"
 container_name="${VLLM_CONTAINER_NAME:-skillsmith-qwen36}"
@@ -30,7 +38,7 @@ docker run -d \
   -e VLLM_USE_DEEP_GEMM=0 \
   -v "${model_path}:/model:ro" \
   "$image" \
-  --model /model \
+  /model \
   --served-model-name "$served_name" \
   --host 0.0.0.0 \
   --port 8000 \

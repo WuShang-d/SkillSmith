@@ -1,0 +1,114 @@
+```json
+{
+  "image_quality": {
+    "clarity": "high",
+    "lighting": "even",
+    "occlusion": "none",
+    "assessment": "图片清晰度高，光线均匀，货架商品排列整齐，无严重遮挡，适合进行排面统计。"
+  },
+  "sku_facings": [
+    {
+      "sku_id": "red_can",
+      "description": "红色易拉罐饮料",
+      "count": 24,
+      "locations": [
+        {
+          "shelf": 1,
+          "position": "left",
+          "count": 14
+        },
+        {
+          "shelf": 2,
+          "position": "center",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "sku_id": "blue_bottle",
+      "description": "蓝色瓶装水",
+      "count": 24,
+      "locations": [
+        {
+          "shelf": 1,
+          "position": "center",
+          "count": 8
+        },
+        {
+          "shelf": 2,
+          "position": "right",
+          "count": 8
+        },
+        {
+          "shelf": 3,
+          "position": "center",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "sku_id": "green_box",
+      "description": "绿色叶纹包装盒",
+      "count": 13,
+      "locations": [
+        {
+          "shelf": 1,
+          "position": "right",
+          "count": 7
+        },
+        {
+          "shelf": 3,
+          "position": "left",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "sku_id": "yellow_bag",
+      "description": "黄色薯片袋",
+      "count": 7,
+      "locations": [
+        {
+          "shelf": 2,
+          "position": "left",
+          "count": 4
+        },
+        {
+          "shelf": 3,
+          "position": "right",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "sku_id": "red_can_rack",
+      "description": "红色易拉罐饮料（金属网架内）",
+      "count": 3,
+      "locations": [
+        {
+          "shelf": 3,
+          "position": "far_right",
+          "count": 3
+        }
+      ]
+    }
+  ],
+  "empty_gaps": [
+    {
+      "shelf": 2,
+      "position": "center_right",
+      "description": "位于中间红色易拉罐与右侧蓝色瓶装水之间，存在明显的连续空位，宽度约等于 3-4 个标准排面。"
+    }
+  ],
+  "uncertainties": [
+    {
+      "item": "SKU 识别",
+      "reason": "由于图片未提供具体的品牌标签或条形码，SKU 仅根据包装颜色、形状和图案特征进行分组描述，无法确认具体品牌。"
+    },
+    {
+      "item": "底层货架右侧",
+      "reason": "货架最底层右侧金属网架后方可能存在被遮挡的商品，但无法从当前视角确认。"
+    }
+  ]
+}
+```

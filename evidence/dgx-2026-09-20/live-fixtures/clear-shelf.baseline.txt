@@ -1,0 +1,82 @@
+```json
+{
+  "shelves": [
+    {
+      "shelf_level": 1,
+      "products": [
+        {
+          "sku": "red_can",
+          "description": "红色罐装饮料",
+          "facing_count": 14,
+          "empty_facing_count": 0
+        },
+        {
+          "sku": "blue_bottle",
+          "description": "蓝色瓶装水",
+          "facing_count": 7,
+          "empty_facing_count": 0
+        },
+        {
+          "sku": "green_box",
+          "description": "绿色盒装饮品",
+          "facing_count": 6,
+          "empty_facing_count": 0
+        }
+      ]
+    },
+    {
+      "shelf_level": 2,
+      "products": [
+        {
+          "sku": "yellow_bag",
+          "description": "黄色袋装薯片",
+          "facing_count": 4,
+          "empty_facing_count": 0
+        },
+        {
+          "sku": "red_can",
+          "description": "红色罐装饮料",
+          "facing_count": 5,
+          "empty_facing_count": 0
+        },
+        {
+          "sku": "blue_bottle",
+          "description": "蓝色瓶装水",
+          "facing_count": 4,
+          "empty_facing_count": 0
+        }
+      ],
+      "empty_facing_count": 3
+    },
+    {
+      "shelf_level": 3,
+      "products": [
+        {
+          "sku": "green_box",
+          "description": "绿色盒装饮品",
+          "facing_count": 5,
+          "empty_facing_count": 0
+        },
+        {
+          "sku": "blue_bottle",
+          "description": "蓝色瓶装水",
+          "facing_count": 6,
+          "empty_facing_count": 0
+        },
+        {
+          "sku": "yellow_bag",
+          "description": "黄色袋装薯片",
+          "facing_count": 3,
+          "empty_facing_count": 0
+        },
+        {
+          "sku": "red_can",
+          "description": "红色罐装饮料",
+          "facing_count": 3,
+          "empty_facing_count": 0
+        }
+      ]
+    }
+  ]
+}
+```

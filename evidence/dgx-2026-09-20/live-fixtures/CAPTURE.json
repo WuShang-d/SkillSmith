@@ -1,0 +1,31 @@
+{
+  "mode": "live",
+  "endpoint": "http://127.0.0.1:8000/v1",
+  "model": "Qwen/Qwen3.6-35B-A3B",
+  "captures": [
+    {
+      "case_id": "clear-shelf",
+      "mode": "baseline",
+      "elapsed_seconds": 18.074,
+      "output_path": "/home/Developer/skillsmith/build/dgx/live-fixtures/clear-shelf.baseline.txt"
+    },
+    {
+      "case_id": "clear-shelf",
+      "mode": "skill",
+      "elapsed_seconds": 25.361,
+      "output_path": "/home/Developer/skillsmith/build/dgx/live-fixtures/clear-shelf.skill.txt"
+    },
+    {
+      "case_id": "occluded-shelf",
+      "mode": "baseline",
+      "elapsed_seconds": 9.237,
+      "output_path": "/home/Developer/skillsmith/build/dgx/live-fixtures/occluded-shelf.baseline.txt"
+    },
+    {
+      "case_id": "occluded-shelf",
+      "mode": "skill",
+      "elapsed_seconds": 16.762,
+      "output_path": "/home/Developer/skillsmith/build/dgx/live-fixtures/occluded-shelf.skill.txt"
+    }
+  ]
+}

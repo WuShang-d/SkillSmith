@@ -1,0 +1,67 @@
+```json
+{
+  "image_quality": {
+    "clarity": "high",
+    "lighting": "even",
+    "occlusion": "partial",
+    "notes": "Image is clear and well-lit. A grey crate in the foreground partially obscures the bottom shelf."
+  },
+  "sku_facings": [
+    {
+      "shelf_level": "Top",
+      "sku_description": "Red beverage cans",
+      "count": 7
+    },
+    {
+      "shelf_level": "Top",
+      "sku_description": "Blue plastic bottles",
+      "count": 5
+    },
+    {
+      "shelf_level": "Top",
+      "sku_description": "Green rectangular boxes",
+      "count": 4
+    },
+    {
+      "shelf_level": "Middle",
+      "sku_description": "Green rectangular boxes",
+      "count": 5
+    },
+    {
+      "shelf_level": "Middle",
+      "sku_description": "Yellow stand-up pouches",
+      "count": 5
+    },
+    {
+      "shelf_level": "Middle",
+      "sku_description": "Red beverage cans",
+      "count": 5
+    },
+    {
+      "shelf_level": "Bottom",
+      "sku_description": "Blue plastic bottles",
+      "count": 5
+    },
+    {
+      "shelf_level": "Bottom",
+      "sku_description": "Yellow stand-up pouches",
+      "count": 3
+    }
+  ],
+  "empty_gaps": [],
+  "uncertainties": [
+    {
+      "item": "Bottom shelf - Green boxes",
+      "reason": "Partially obscured by the grey crate in the foreground. Visible count is 3, but the actual number may be higher."
+    },
+    {
+      "item": "Bottom shelf - Blue bottles",
+      "reason": "Partially obscured by the grey crate. Visible count is 5, but the actual number may be higher."
+    },
+    {
+      "item": "Bottom shelf - Crate contents",
+      "reason": "The grey crate contains loose items (yellow pouches, red cans) that are not part of the shelf facings and cannot be reliably counted."
+    }
+  ]
+}
+```

@@ -1,0 +1,29 @@
+{
+  "image_quality": {
+    "clarity": "high",
+    "occlusion": "minimal",
+    "coverage": "full_shelf_view"
+  },
+  "sku_facings": {
+    "top_shelf": {
+      "red_cans": 7,
+      "blue_bottles": 5,
+      "green_boxes": 4
+    },
+    "middle_shelf": {
+      "green_boxes": 5,
+      "yellow_pouches": 5,
+      "red_cans": 5
+    },
+    "bottom_shelf": {
+      "blue_bottles": 8,
+      "green_boxes": 4,
+      "yellow_pouches": 3
+    }
+  },
+  "empty_gaps": [],
+  "uncertainties": [
+    "The grey crate in the foreground obscures the bottom shelf, preventing a full count of the items behind it.",
+    "The labels on the products are not legible, so specific SKUs cannot be identified."
+  ]
+}
