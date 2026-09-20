@@ -77,6 +77,7 @@ Images are restricted to the declared input root. Endpoints are restricted to lo
 - `examples/retail-shelf-audit/`: a complete multimodal example with positive and negative evaluations.
 - `tests/`: deterministic release-gate tests.
 - `scripts/verify.sh`: full local verification; `scripts/demo-dgx.sh`: live evidence path.
+- `scripts/package.sh`: create a source archive from tracked Git content only, excluding ignored credentials and build outputs.
 - `docs/ROADSHOW.md`: timed competition demo; `docs/COMPLETION_AUDIT.md`: honest requirement-by-requirement status.
 
 The two shelf images are synthetic, brandless evaluation assets generated specifically for this project. Their prompts, provenance, and hashes are recorded in `examples/retail-shelf-audit/ASSET_NOTES.md`; they are not presented as real store data.

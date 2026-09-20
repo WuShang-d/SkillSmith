@@ -5,6 +5,7 @@
 # Generated runs and installed demo skills
 /build/
 /output/
+/dist/
 
 # Python
 __pycache__/
