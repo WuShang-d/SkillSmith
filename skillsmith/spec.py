@@ -100,6 +100,8 @@ def load_spec(path: str | Path) -> WorkflowSpec:
         _require_text(case, "prompt")
         if not isinstance(case.get("should_trigger"), bool):
             raise SpecError(f"eval {case_id}: should_trigger must be boolean")
+        if "input" in case and (not isinstance(case["input"], str) or not case["input"].strip()):
+            raise SpecError(f"eval {case_id}: input must be non-empty text when provided")
         positives += int(case["should_trigger"])
         negatives += int(not case["should_trigger"])
     if not positives or not negatives:

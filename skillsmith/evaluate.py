@@ -36,7 +36,7 @@ def predicts_trigger(prompt: str, triggers: list[str], negative_triggers: list[s
 
 def _parse_output(text: str, output_format: str) -> Any:
     if output_format == "json":
-        cleaned = text.strip()
+        cleaned = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL | re.IGNORECASE).strip()
         if cleaned.startswith("```"):
             cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", cleaned, flags=re.IGNORECASE)
         return json.loads(cleaned)
@@ -121,7 +121,12 @@ def evaluate_fixtures(skill_dir: str | Path, fixture_dir: str | Path) -> dict[st
     }
 
 
-def benchmark_markdown(result: dict[str, Any], skill_name: str) -> str:
+def benchmark_markdown(result: dict[str, Any], skill_name: str, *, mode: str = "fixture") -> str:
+    evidence_note = (
+        "Live mode used raw outputs captured from one configured model endpoint; see the adjacent CAPTURE.json for model and latency evidence."
+        if mode == "live"
+        else "Fixture mode is deterministic and validates the evaluation pipeline. Replace fixtures with DGX endpoint runs before final judging."
+    )
     rows = [
         f"# {skill_name} benchmark",
         "",
@@ -132,7 +137,7 @@ def benchmark_markdown(result: dict[str, Any], skill_name: str) -> str:
         "",
         f"Verdict: **{result['verdict'].upper()}**",
         "",
-        "Fixture mode is deterministic and validates the evaluation pipeline. Replace fixtures with DGX endpoint runs before final judging.",
+        evidence_note,
         "",
     ]
     return "\n".join(rows)

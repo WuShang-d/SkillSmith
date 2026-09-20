@@ -79,6 +79,7 @@ import mimetypes
 import os
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -88,6 +89,7 @@ def main() -> int:
     parser.add_argument("--input", required=True, help="Absolute path to an image")
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--mock-response", help="Offline JSON/text fixture used for deterministic tests")
+    parser.add_argument("--allow-remote-endpoint", action="store_true")
     args = parser.parse_args()
 
     source = Path(args.input).resolve()
@@ -107,11 +109,15 @@ def main() -> int:
         model = os.environ.get("OPENAI_MODEL", "")
         if not base_url or not model:
             raise SystemExit("set OPENAI_BASE_URL and OPENAI_MODEL, or pass --mock-response")
+        parsed = urllib.parse.urlparse(base_url)
+        if parsed.hostname not in {"127.0.0.1", "localhost", "::1"} and not args.allow_remote_endpoint:
+            raise SystemExit("refusing to transmit input to a non-local endpoint; explicit --allow-remote-endpoint is required")
         mime = mimetypes.guess_type(source.name)[0] or "application/octet-stream"
         encoded = base64.b64encode(source.read_bytes()).decode("ascii")
         payload = {
             "model": model,
             "temperature": 0,
+            "chat_template_kwargs": {"enable_thinking": False},
             "messages": [{"role": "user", "content": [
                 {"type": "text", "text": prompt},
                 {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}},

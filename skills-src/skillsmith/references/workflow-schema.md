@@ -18,6 +18,8 @@ Required top-level fields:
 
 For positive evaluations, optional `expected_contains` and `forbidden_contains` arrays add deterministic output checks. Fixture files are named `<id>.baseline.txt` and `<id>.skill.txt`.
 
+For live DGX capture, every positive case also needs `input`, resolved beneath the explicitly selected input root. Relative paths cannot escape that root.
+
 Optional fields include `display_name` and `license`.
 
 Never place credentials in the workflow JSON. Generated runners read endpoint configuration from `OPENAI_BASE_URL`, `OPENAI_MODEL`, and `OPENAI_API_KEY` at runtime.

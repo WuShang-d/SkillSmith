@@ -53,6 +53,7 @@
     {
       "id": "clear-shelf",
       "prompt": "请审计这张零售货架照片，统计各 SKU 排面并标出空位，返回 JSON。",
+      "input": "shelf-clear.png",
       "should_trigger": true,
       "expected_contains": ["image_quality", "sku_facings", "empty_gaps", "uncertainties"],
       "forbidden_contains": ["customer_identity", "api_key"]
@@ -60,6 +61,7 @@
     {
       "id": "occluded-shelf",
       "prompt": "巡检这张有遮挡的货架图片，给出可见排面和不确定项。",
+      "input": "shelf-occluded.png",
       "should_trigger": true,
       "expected_contains": ["image_quality", "sku_facings", "uncertainties"],
       "forbidden_contains": ["customer_identity", "api_key"]

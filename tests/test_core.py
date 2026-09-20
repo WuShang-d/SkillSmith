@@ -1,9 +1,14 @@
 import json
+import base64
+import io
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
-from skillsmith.evaluate import evaluate_fixtures
+from skillsmith.evaluate import benchmark_markdown, evaluate_fixtures
+from skillsmith.endpoint import validate_endpoint
+from skillsmith.endpoint import capture_ab
 from skillsmith.forge import forge
 from skillsmith.install import install
 from skillsmith.security import report, scan
@@ -64,6 +69,72 @@ class SkillSmithTests(unittest.TestCase):
             self.assertEqual(result["security"], "pass")
             self.assertEqual(result["evaluation"]["verdict"], "pass")
             self.assertTrue(Path(result["installed"]).is_dir())
+
+    def test_endpoint_defaults_to_local_only(self):
+        self.assertEqual(validate_endpoint("http://127.0.0.1:8000/v1"), "http://127.0.0.1:8000/v1")
+        with self.assertRaises(ValueError):
+            validate_endpoint("https://example.com/v1")
+        self.assertEqual(
+            validate_endpoint("https://example.com/v1", allow_remote=True),
+            "https://example.com/v1",
+        )
+        with self.assertRaises(ValueError):
+            validate_endpoint("https://secret@example.com/v1", allow_remote=True)
+
+    def test_web_live_mode_rejects_remote_endpoint(self):
+        spec = json.loads((EXAMPLE / "workflow.json").read_text(encoding="utf-8"))
+        spec["evals"] = [spec["evals"][0], spec["evals"][2]]
+        payload = {
+            "spec": spec,
+            "live": {
+                "image": {
+                    "name": "shelf.pgm",
+                    "data": base64.b64encode((EXAMPLE / "shelf-clear.png").read_bytes()).decode("ascii"),
+                },
+                "base_url": "https://example.com/v1",
+                "model": "example-model",
+            },
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, "non-local endpoint"):
+                forge_submission(payload, Path(tmp))
+
+    def test_live_capture_writes_baseline_and_skill_evidence(self):
+        spec = load_spec(EXAMPLE / "workflow.json")
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            generated = forge(spec, tmp_path / "generated")
+
+            def fake_urlopen(request, timeout):
+                request_body = json.loads(request.data)
+                system = request_body["messages"][0]["content"]
+                if system.startswith("Follow the Agent Skill"):
+                    content = json.dumps({
+                        "image_quality": "clear",
+                        "sku_facings": [],
+                        "empty_gaps": [],
+                        "uncertainties": [],
+                    })
+                else:
+                    content = "The shelf looks mostly full."
+                body = {"choices": [{"message": {"content": content}}]}
+                return io.BytesIO(json.dumps(body).encode("utf-8"))
+
+            capture_dir = tmp_path / "capture"
+            with patch("skillsmith.endpoint.urllib.request.urlopen", side_effect=fake_urlopen):
+                manifest = capture_ab(
+                    generated,
+                    EXAMPLE,
+                    capture_dir,
+                    base_url="http://127.0.0.1:8000/v1",
+                    model="local-test-model",
+                )
+            self.assertEqual(manifest["mode"], "live")
+            self.assertEqual(len(manifest["captures"]), 4)
+            self.assertTrue((capture_dir / "CAPTURE.json").is_file())
+            result = evaluate_fixtures(generated, capture_dir)
+            self.assertEqual(result["verdict"], "pass")
+            self.assertIn("Live mode used raw outputs", benchmark_markdown(result, spec.name, mode="live"))
 
 
 if __name__ == "__main__":

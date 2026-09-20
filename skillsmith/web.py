@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
+import copy
 import json
+import os
 import threading
 import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -9,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from .evaluate import benchmark_markdown, evaluate_fixtures
+from .endpoint import capture_ab
 from .forge import forge
 from .install import install
 from .security import report, scan
@@ -56,6 +61,9 @@ main{max-width:1120px;margin:auto;padding:54px 24px 80px}.eyebrow{color:var(--gr
 不得输出图片 base64 或运行时凭据。</textarea></div>
 <div><label>无 Skill 输出（Baseline）</label><textarea id="baseline" required>The shelf looks mostly full. There may be a gap.</textarea></div>
 <div><label>有 Skill 输出</label><textarea id="skillout" required>{"image_quality":"clear","sku_facings":[],"empty_gaps":[],"uncertainties":[]}</textarea></div>
+<div class="wide"><label>真实 DGX A/B · 可选图片</label><input id="image" type="file" accept="image/*"><div class="hint">选择图片后，将忽略上面的模拟输出，并由同一台本地模型分别生成 Baseline 与 Skill 输出。</div></div>
+<div><label>本地模型端点</label><input id="baseUrl" value="http://127.0.0.1:8000/v1"></div>
+<div><label>本地模型名称</label><input id="model" value="Qwen/Qwen3.6-35B-A3B"></div>
 <div class="wide"><label>负向测试请求</label><input id="negativePrompt" value="为这款饮料写一段社交媒体营销文案。" required><div class="hint">正确行为是“不调用这个 Skill”。</div></div>
 </div><button id="submit" type="submit">开始锻造 Skill</button></form>
 <div id="result"><div class="metrics"><div class="metric"><span>安全门禁</span><strong id="security">—</strong></div><div class="metric"><span>触发准确率</span><strong id="trigger">—</strong></div><div class="metric"><span>A/B 提升</span><strong id="delta">—</strong></div><div class="metric"><span>安装状态</span><strong id="installed">—</strong></div></div><pre id="details"></pre></div>
@@ -65,7 +73,7 @@ const lines=id=>document.getElementById(id).value.split('\n').map(x=>x.trim()).f
 document.getElementById('forge').addEventListener('submit',async e=>{e.preventDefault();const b=document.getElementById('submit'),box=document.getElementById('result'),details=document.getElementById('details');b.disabled=true;b.textContent='锻造中…';box.style.display='block';details.className='';details.textContent='正在生成、扫描、评测并安装…';
 const fields=document.getElementById('fields').value.split(',').map(x=>x.trim()).filter(Boolean);const steps=lines('steps').map(x=>{const p=x.split('|');return {title:p.shift().trim(),instruction:p.join('|').trim()}});
 const spec={schema_version:'1.0',name:document.getElementById('name').value.trim(),display_name:document.getElementById('display').value.trim(),description:document.getElementById('description').value.trim(),license:'Apache-2.0',successful_run_summary:document.getElementById('summary').value.trim(),triggers:lines('triggers'),negative_triggers:lines('negative'),steps,guardrails:lines('guardrails'),output_contract:{format:'json',required_fields:fields},evals:[{id:'positive-demo',prompt:document.getElementById('positive').value.trim(),should_trigger:true,expected_contains:fields,forbidden_contains:['api_key','customer_identity']},{id:'negative-demo',prompt:document.getElementById('negativePrompt').value.trim(),should_trigger:false}]};
-try{const r=await fetch('/api/forge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({spec,fixtures:{'positive-demo':{baseline:document.getElementById('baseline').value,skill:document.getElementById('skillout').value}}})});const d=await r.json();if(!r.ok)throw new Error(d.error||'unknown error');document.getElementById('security').textContent=d.security.toUpperCase();document.getElementById('trigger').textContent=(d.evaluation.trigger_accuracy*100).toFixed(0)+'%';document.getElementById('delta').textContent=(d.evaluation.improvement*100).toFixed(1)+'%';document.getElementById('installed').textContent=d.status==='ok'?'READY':'BLOCKED';details.textContent=JSON.stringify(d,null,2)}catch(err){details.className='error';details.textContent='失败：'+err.message}finally{b.disabled=false;b.textContent='再次锻造'}});
+try{const payload={spec,fixtures:{'positive-demo':{baseline:document.getElementById('baseline').value,skill:document.getElementById('skillout').value}}};const file=document.getElementById('image').files[0];if(file){const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(reader.error);reader.readAsDataURL(file)});payload.live={image:{name:file.name,data:String(dataUrl).split(',',2)[1]},base_url:document.getElementById('baseUrl').value.trim(),model:document.getElementById('model').value.trim()}}const r=await fetch('/api/forge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const d=await r.json();if(!r.ok)throw new Error(d.error||'unknown error');document.getElementById('security').textContent=d.security.toUpperCase();document.getElementById('trigger').textContent=(d.evaluation.trigger_accuracy*100).toFixed(0)+'%';document.getElementById('delta').textContent=(d.evaluation.improvement*100).toFixed(1)+'%';document.getElementById('installed').textContent=d.status==='ok'?'READY':'BLOCKED';details.textContent=JSON.stringify(d,null,2)}catch(err){details.className='error';details.textContent='失败：'+err.message}finally{b.disabled=false;b.textContent='再次锻造'}});
 </script></body></html>'''
 
 
@@ -74,8 +82,27 @@ def forge_submission(payload: dict[str, Any], workspace: Path) -> dict[str, Any]
     run_root = workspace / "runs" / run_id
     fixture_root = run_root / "fixtures"
     fixture_root.mkdir(parents=True)
+    spec_data = copy.deepcopy(payload["spec"])
+    live = payload.get("live")
+    input_root = run_root / "inputs"
+    if live:
+        image_data = live.get("image", {})
+        filename = Path(str(image_data.get("name", "input-image"))).name
+        if Path(filename).suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".pgm"}:
+            raise ValueError("live input must be a supported image file")
+        try:
+            raw = base64.b64decode(str(image_data.get("data", "")), validate=True)
+        except (binascii.Error, ValueError) as exc:
+            raise ValueError("live image data is invalid") from exc
+        if not raw or len(raw) > 12_000_000:
+            raise ValueError("live image must be between 1 byte and 12 MB")
+        input_root.mkdir()
+        (input_root / filename).write_bytes(raw)
+        for case in spec_data.get("evals", []):
+            if case.get("should_trigger"):
+                case["input"] = filename
     spec_path = run_root / "workflow.json"
-    spec_path.write_text(json.dumps(payload["spec"], indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    spec_path.write_text(json.dumps(spec_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     for case_id, outputs in payload.get("fixtures", {}).items():
         if not isinstance(outputs, dict):
             continue
@@ -92,9 +119,24 @@ def forge_submission(payload: dict[str, Any], workspace: Path) -> dict[str, Any]
     if security_result["verdict"] != "pass":
         return {**result, "status": "blocked", "stage": "security", "findings": security_result["findings"]}
 
+    capture = None
+    if live:
+        capture = capture_ab(
+            generated,
+            input_root,
+            fixture_root,
+            base_url=str(live.get("base_url", "")),
+            model=str(live.get("model", "")),
+            api_key=os.environ.get("OPENAI_API_KEY", "local"),
+        )
     evaluation = evaluate_fixtures(generated, fixture_root)
-    (generated / "BENCHMARK.md").write_text(benchmark_markdown(evaluation, spec.name), encoding="utf-8")
+    (generated / "BENCHMARK.md").write_text(
+        benchmark_markdown(evaluation, spec.name, mode="live" if live else "fixture"), encoding="utf-8"
+    )
+    result["mode"] = "live" if live else "fixture"
     result["evaluation"] = evaluation
+    if capture:
+        result["capture"] = capture
     if evaluation["verdict"] != "pass":
         return {**result, "status": "blocked", "stage": "evaluation"}
 
@@ -121,7 +163,7 @@ def make_handler(workspace: Path):
                 return
             try:
                 length = int(self.headers.get("Content-Length", "0"))
-                if length > 1_000_000:
+                if length > 20_000_000:
                     raise ValueError("request too large")
                 payload = json.loads(self.rfile.read(length))
                 result = forge_submission(payload, workspace)

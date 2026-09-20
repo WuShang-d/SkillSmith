@@ -35,7 +35,7 @@ Replay the generated skill without a model endpoint:
 
 ```bash
 python3 build/workspace/skills/retail-shelf-audit/scripts/run.py \
-  --input examples/retail-shelf-audit/sample-shelf.pgm \
+  --input examples/retail-shelf-audit/shelf-clear.png \
   --output-dir build/replay \
   --mock-response examples/retail-shelf-audit/fixtures/clear-shelf.skill.txt
 ```
@@ -50,9 +50,33 @@ export OPENAI_API_KEY=local
 
 Do not commit real credentials. Fixture mode validates the pipeline mechanics, not model quality; the final competition benchmark must use captured DGX endpoint results.
 
+## Live DGX A/B evidence
+
+Each positive evaluation case can name an `input` image beneath an input root. The live pipeline sends the same prompt and image to the same local model twice: once with a generic baseline system message and once with the generated Skill. It records raw answers and latency before applying the same deterministic rubric.
+
+```bash
+export OPENAI_BASE_URL=http://127.0.0.1:8000/v1
+export OPENAI_MODEL=Qwen/Qwen3.6-35B-A3B
+export OPENAI_API_KEY=local
+
+python3 -m skillsmith.cli live-pipeline \
+  examples/retail-shelf-audit/workflow.json \
+  --input-root examples/retail-shelf-audit \
+  --capture-dir build/live-fixtures \
+  --output build/live-generated \
+  --destination build/live-workspace/skills \
+  --force
+```
+
+Images are restricted to the declared input root. Endpoints are restricted to loopback addresses by default; using a remote endpoint requires the explicit `--allow-remote-endpoint` flag and user authorization.
+
 ## Project layout
 
 - `skillsmith/`: forge, scan, evaluation, install, and CLI implementation.
 - `skills-src/skillsmith/`: the reusable meta-skill that teaches an agent to run the pipeline.
 - `examples/retail-shelf-audit/`: a complete multimodal example with positive and negative evaluations.
 - `tests/`: deterministic release-gate tests.
+- `scripts/verify.sh`: full local verification; `scripts/demo-dgx.sh`: live evidence path.
+- `docs/ROADSHOW.md`: timed competition demo; `docs/COMPLETION_AUDIT.md`: honest requirement-by-requirement status.
+
+The two shelf images are synthetic, brandless evaluation assets generated specifically for this project. Their prompts, provenance, and hashes are recorded in `examples/retail-shelf-audit/ASSET_NOTES.md`; they are not presented as real store data.

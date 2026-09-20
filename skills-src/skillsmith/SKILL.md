@@ -28,6 +28,8 @@ Forge the user's validated workflow without inventing missing technical facts. P
    python3 -m skillsmith.cli evaluate GENERATED_DIR/SKILL_NAME --fixtures FIXTURE_DIR
    ```
 
+   On DGX Spark, use `live-pipeline` to capture both conditions from the same local model before scoring. Read [references/workflow-schema.md](references/workflow-schema.md) and add an `input` path to each positive case. Non-local endpoints are rejected unless the user explicitly authorizes image transmission.
+
 5. Install only after both gates pass. Use a project-local workspace destination unless the user explicitly chooses a global agent directory.
 
    ```bash
