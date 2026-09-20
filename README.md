@@ -48,6 +48,19 @@ export OPENAI_MODEL=YOUR_LOCAL_MULTIMODAL_MODEL
 export OPENAI_API_KEY=local
 ```
 
+On the competition DGX Spark, start the preloaded Qwen3.6 model through the
+loopback-only vLLM service, then wait for readiness:
+
+```bash
+./scripts/start-vllm-dgx.sh
+./scripts/wait-vllm-dgx.sh
+```
+
+The launch script mounts the model read-only, exposes no network-facing port,
+and keeps all inference on the DGX. Its image, model path, port, container name,
+and memory utilization can be overridden with the documented environment
+variables at the top of the script.
+
 Do not commit real credentials. Fixture mode validates the pipeline mechanics, not model quality; the final competition benchmark must use captured DGX endpoint results.
 
 ## Live DGX A/B evidence
@@ -76,7 +89,9 @@ Images are restricted to the declared input root. Endpoints are restricted to lo
 - `skills-src/skillsmith/`: the reusable meta-skill that teaches an agent to run the pipeline.
 - `examples/retail-shelf-audit/`: a complete multimodal example with positive and negative evaluations.
 - `tests/`: deterministic release-gate tests.
-- `scripts/verify.sh`: full local verification; `scripts/demo-dgx.sh`: live evidence path.
+- `scripts/verify.sh`: full local verification; `scripts/start-vllm-dgx.sh` and
+  `scripts/wait-vllm-dgx.sh`: reproducible DGX model service; `scripts/demo-dgx.sh`:
+  live evidence path.
 - `scripts/package.sh`: create a source archive from tracked Git content only, excluding ignored credentials and build outputs.
 - `docs/ROADSHOW.md`: timed competition demo; `docs/COMPLETION_AUDIT.md`: honest requirement-by-requirement status.
 
