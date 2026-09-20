@@ -64,6 +64,7 @@ def chat_completion(
     payload = {
         "model": model,
         "temperature": 0,
+        "max_tokens": 1024,
         "chat_template_kwargs": {"enable_thinking": False},
         "messages": [
             {"role": "system", "content": system},
