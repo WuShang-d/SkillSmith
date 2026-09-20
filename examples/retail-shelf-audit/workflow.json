@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "name": "retail-shelf-audit",
+  "display_name": "零售货架巡检",
+  "description": "Inspect a retail shelf image and return visible SKU facings, empty gaps, image quality, and uncertainties as structured JSON.",
+  "license": "Apache-2.0",
+  "successful_run_summary": "A local multimodal model correctly audited a shelf photo, counted visible facings, marked empty gaps, and separated uncertain observations from confirmed evidence.",
+  "triggers": [
+    "审计或巡检一张零售货架照片",
+    "统计货架上各 SKU 的可见排面",
+    "识别货架空位并输出结构化 JSON",
+    "audit a retail shelf image"
+  ],
+  "negative_triggers": [
+    "撰写商品营销文案",
+    "根据库存数据库生成补货单但没有图片",
+    "识别人脸、顾客身份或人口属性"
+  ],
+  "steps": [
+    {
+      "title": "检查输入质量",
+      "instruction": "先判断图片清晰度、遮挡和拍摄范围；无法可靠观察时明确标记，不补猜画外内容。"
+    },
+    {
+      "title": "盘点可见排面",
+      "instruction": "按可见标签或包装特征分组，只统计能够从像素证实的 SKU 排面数量。"
+    },
+    {
+      "title": "识别空位",
+      "instruction": "记录货架上明显连续的空缺区域及其相对位置，不把价格牌间隙误判为空位。"
+    },
+    {
+      "title": "输出审计结果",
+      "instruction": "返回严格 JSON，分别给出图片质量、SKU 排面、空位和不确定项。"
+    }
+  ],
+  "guardrails": [
+    "只报告图片中可见的证据，不推断画外库存。",
+    "不得识别或推断顾客身份、年龄、性别、国籍或行为意图。",
+    "标签不可读时使用可复核的视觉描述，并写入 uncertainties。",
+    "不得输出输入图片的 base64 数据或任何运行时凭据。"
+  ],
+  "output_contract": {
+    "format": "json",
+    "required_fields": [
+      "image_quality",
+      "sku_facings",
+      "empty_gaps",
+      "uncertainties"
+    ]
+  },
+  "evals": [
+    {
+      "id": "clear-shelf",
+      "prompt": "请审计这张零售货架照片，统计各 SKU 排面并标出空位，返回 JSON。",
+      "should_trigger": true,
+      "expected_contains": ["image_quality", "sku_facings", "empty_gaps", "uncertainties"],
+      "forbidden_contains": ["customer_identity", "api_key"]
+    },
+    {
+      "id": "occluded-shelf",
+      "prompt": "巡检这张有遮挡的货架图片，给出可见排面和不确定项。",
+      "should_trigger": true,
+      "expected_contains": ["image_quality", "sku_facings", "uncertainties"],
+      "forbidden_contains": ["customer_identity", "api_key"]
+    },
+    {
+      "id": "marketing-copy",
+      "prompt": "为这款饮料写一段适合社交媒体的营销文案。",
+      "should_trigger": false
+    },
+    {
+      "id": "database-replenishment",
+      "prompt": "读取库存数据库并生成补货单，不需要查看货架照片。",
+      "should_trigger": false
+    }
+  ]
+}

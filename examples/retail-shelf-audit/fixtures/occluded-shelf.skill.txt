@@ -1,0 +1,1 @@
+{"image_quality":"partially_occluded","sku_facings":[{"sku":"green-box","count":3}],"empty_gaps":[],"uncertainties":["Lower shelf is occluded; hidden facings were not counted."]}

@@ -1,0 +1,18 @@
+# Local credentials and environment-specific handouts
+/登录信息表.xlsx
+/Spark云节点访问与使用手册.docx
+
+# Generated runs and installed demo skills
+/build/
+/output/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+
+# Local secrets
+.env
+.env.*
+!.env.example

@@ -1,0 +1,1 @@
+{"image_quality":"clear","sku_facings":[{"sku":"red-can","count":6},{"sku":"blue-bottle","count":4}],"empty_gaps":[{"position":"middle-right","width_facings":2}],"uncertainties":[]}
