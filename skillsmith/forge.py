@@ -77,6 +77,7 @@ import base64
 import json
 import mimetypes
 import os
+import re
 import sys
 import urllib.error
 import urllib.parse
@@ -99,8 +100,19 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     workflow = json.loads((Path(__file__).parents[1] / "references/workflow.json").read_text())
-    prompt = "\n".join(step["instruction"] for step in workflow["steps"])
-    prompt += "\nReturn only " + workflow["output_contract"]["format"] + "."
+    required_fields = workflow["output_contract"].get("required_fields", [])
+    system = "\n".join([
+        "Execute the installed Agent Skill exactly as specified.",
+        "Workflow:",
+        *[f"{index}. {step['instruction']}" for index, step in enumerate(workflow["steps"], 1)],
+        "Guardrails:",
+        *[f"- {guardrail}" for guardrail in workflow["guardrails"]],
+        "Output contract:",
+        f"- Return only valid {workflow['output_contract']['format']}.",
+        "- Use these exact top-level field names: " + ", ".join(required_fields) + ".",
+        "- Include every required field even when its value is empty or uncertain.",
+    ])
+    prompt = "Apply the installed skill to this input image. Do not rename contract fields."
 
     if args.mock_response:
         content = Path(args.mock_response).read_text(encoding="utf-8")
@@ -119,10 +131,13 @@ def main() -> int:
             "temperature": 0,
             "max_tokens": 1024,
             "chat_template_kwargs": {"enable_thinking": False},
-            "messages": [{"role": "user", "content": [
-                {"type": "text", "text": prompt},
-                {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}},
-            ]}],
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}},
+                ]},
+            ],
         }
         request = urllib.request.Request(
             base_url + "/chat/completions",
@@ -138,6 +153,21 @@ def main() -> int:
         except urllib.error.URLError as exc:
             raise SystemExit(f"model request failed: {exc}") from exc
         content = body["choices"][0]["message"]["content"]
+
+    if workflow["output_contract"]["format"] == "json":
+        cleaned = re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL | re.IGNORECASE).strip()
+        if cleaned.startswith("```"):
+            cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", cleaned, flags=re.IGNORECASE)
+        try:
+            parsed_content = json.loads(cleaned)
+        except json.JSONDecodeError as exc:
+            raise SystemExit(f"model response violates JSON output contract: {exc}") from exc
+        if not isinstance(parsed_content, dict):
+            raise SystemExit("model response violates output contract: expected a JSON object")
+        missing = [field for field in required_fields if field not in parsed_content]
+        if missing:
+            raise SystemExit("model response violates output contract; missing fields: " + ", ".join(missing))
+        content = json.dumps(parsed_content, indent=2, ensure_ascii=False)
 
     suffix = ".json" if workflow["output_contract"]["format"] == "json" else ".txt"
     result_path = output_dir / ("result" + suffix)

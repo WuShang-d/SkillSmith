@@ -1,6 +1,8 @@
 import json
 import base64
 import io
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -41,6 +43,31 @@ class SkillSmithTests(unittest.TestCase):
             result = report(scan(root))
             self.assertEqual(result["verdict"], "fail")
             self.assertEqual(result["counts"]["high"], 1)
+
+    def test_generated_runner_rejects_contract_violation(self):
+        spec = load_spec(EXAMPLE / "workflow.json")
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            generated = forge(spec, tmp_path / "generated")
+            invalid = tmp_path / "invalid.json"
+            invalid.write_text('{"renamed_field": []}', encoding="utf-8")
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(generated / "scripts/run.py"),
+                    "--input",
+                    str(EXAMPLE / "shelf-clear.png"),
+                    "--output-dir",
+                    str(tmp_path / "result"),
+                    "--mock-response",
+                    str(invalid),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("missing fields", result.stderr)
 
     def test_requires_negative_eval(self):
         data = json.loads((EXAMPLE / "workflow.json").read_text(encoding="utf-8"))
