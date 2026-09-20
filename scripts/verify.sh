@@ -19,6 +19,8 @@ python3 build/verify/workspace/skills/retail-shelf-audit/scripts/run.py \
   --mock-response examples/retail-shelf-audit/fixtures/clear-shelf.skill.txt
 
 python3 -c 'import json, pathlib; p=pathlib.Path("build/verify/replay/result.json"); d=json.loads(p.read_text()); required={"image_quality","sku_facings","empty_gaps","uncertainties"}; assert required <= d.keys(); print("replay contract: PASS")'
-git diff --check
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git diff --check
+fi
 
 echo "SkillSmith verification: PASS"
