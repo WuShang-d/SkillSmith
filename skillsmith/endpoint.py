@@ -11,6 +11,9 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
+from .forge import contract_instructions
+from .spec import is_output_case
+
 
 LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
 
@@ -21,6 +24,8 @@ class Capture:
     mode: str
     elapsed_seconds: float
     output_path: str
+    prompt_tokens: int | None = None
+    completion_tokens: int | None = None
 
 
 def validate_endpoint(base_url: str, *, allow_remote: bool = False) -> str:
@@ -49,34 +54,7 @@ def _content_text(content: Any) -> str:
     raise ValueError("model response does not contain text content")
 
 
-def chat_completion(
-    *,
-    base_url: str,
-    model: str,
-    api_key: str,
-    prompt: str,
-    system: str,
-    image: Path,
-    timeout: float = 300,
-) -> tuple[str, float]:
-    mime = mimetypes.guess_type(image.name)[0] or "application/octet-stream"
-    encoded = base64.b64encode(image.read_bytes()).decode("ascii")
-    payload = {
-        "model": model,
-        "temperature": 0,
-        "max_tokens": 1024,
-        "chat_template_kwargs": {"enable_thinking": False},
-        "messages": [
-            {"role": "system", "content": system},
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}},
-                ],
-            },
-        ],
-    }
+def post_chat(base_url: str, api_key: str, payload: dict[str, Any], timeout: float) -> tuple[dict[str, Any], float]:
     request = urllib.request.Request(
         base_url + "/chat/completions",
         data=json.dumps(payload).encode("utf-8"),
@@ -91,12 +69,52 @@ def chat_completion(
         raise RuntimeError(f"model endpoint returned HTTP {exc.code}: {detail}") from exc
     except urllib.error.URLError as exc:
         raise RuntimeError(f"model endpoint request failed: {exc.reason}") from exc
-    elapsed = time.monotonic() - started
+    return body, time.monotonic() - started
+
+
+def chat_completion(
+    *,
+    base_url: str,
+    model: str,
+    api_key: str,
+    prompt: str,
+    system: str,
+    image: Path,
+    timeout: float = 300,
+) -> tuple[str, float, dict[str, Any]]:
+    mime = mimetypes.guess_type(image.name)[0] or "application/octet-stream"
+    encoded = base64.b64encode(image.read_bytes()).decode("ascii")
+    payload = {
+        "model": model,
+        "temperature": 0,
+        "max_tokens": 2048,
+        "chat_template_kwargs": {"enable_thinking": False},
+        "messages": [
+            {"role": "system", "content": system},
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}},
+                ],
+            },
+        ],
+    }
+    body, elapsed = post_chat(base_url, api_key, payload, timeout)
     try:
         content = _content_text(body["choices"][0]["message"]["content"])
     except (KeyError, IndexError, TypeError, ValueError) as exc:
         raise RuntimeError("model endpoint returned an incompatible response") from exc
-    return content.strip(), elapsed
+    usage = body.get("usage") if isinstance(body.get("usage"), dict) else {}
+    return content.strip(), elapsed, usage
+
+
+BASELINE_SYSTEM = "You are a capable multimodal assistant. Answer the user's request using only visible evidence."
+
+
+def baseline_system(contract: dict[str, Any]) -> str:
+    """Generic assistant that knows the output format but not the skill's workflow or guardrails."""
+    return "\n".join([BASELINE_SYSTEM, "Output format:", *(f"- {line}" for line in contract_instructions(contract))])
 
 
 def _input_path(input_root: Path, relative: str) -> Path:
@@ -132,17 +150,18 @@ def capture_ab(
     evals = json.loads((root / "evals/evals.json").read_text(encoding="utf-8"))["cases"]
     skill_md = (root / "SKILL.md").read_text(encoding="utf-8")
     workflow = (root / "references/workflow.json").read_text(encoding="utf-8")
+    contract = json.loads(workflow)["output_contract"]
     captures: list[Capture] = []
 
     for case in evals:
-        if not case["should_trigger"]:
+        if not is_output_case(case):
             continue
         relative_input = case.get("input")
         if not isinstance(relative_input, str) or not relative_input:
             raise ValueError(f"positive eval {case['id']} requires an input path for live capture")
         image = _input_path(inputs, relative_input)
         conditions = {
-            "baseline": "You are a capable multimodal assistant. Answer the user's request using only visible evidence.",
+            "baseline": baseline_system(contract),
             "skill": (
                 "Follow the Agent Skill below exactly. Respect its trigger boundary, workflow, output contract, and guardrails.\n\n"
                 + skill_md
@@ -151,7 +170,7 @@ def capture_ab(
             ),
         }
         for mode, system in conditions.items():
-            text, elapsed = chat_completion(
+            text, elapsed, usage = chat_completion(
                 base_url=endpoint,
                 model=model,
                 api_key=api_key,
@@ -162,7 +181,10 @@ def capture_ab(
             )
             path = output / f"{case['id']}.{mode}.txt"
             path.write_text(text + "\n", encoding="utf-8")
-            captures.append(Capture(case["id"], mode, round(elapsed, 3), str(path)))
+            captures.append(Capture(
+                case["id"], mode, round(elapsed, 3), str(path),
+                usage.get("prompt_tokens"), usage.get("completion_tokens"),
+            ))
 
     manifest = {
         "mode": "live",

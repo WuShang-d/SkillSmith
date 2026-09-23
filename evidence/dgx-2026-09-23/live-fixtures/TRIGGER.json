@@ -1,0 +1,826 @@
+{
+  "method": "agent-router",
+  "endpoint": "http://127.0.0.1:8000/v1",
+  "model": "Qwen/Qwen3.6-35B-A3B",
+  "repeats": 5,
+  "temperature": 0.7,
+  "catalogue": [
+    "accelerated-computing-cudf",
+    "cuopt-routing-api-python",
+    "inventory-replenishment",
+    "local-pedestrian-detector",
+    "marketing-copywriter",
+    "rag-blueprint",
+    "retail-shelf-audit",
+    "tao-generate-image-grounding",
+    "vss-ask-video",
+    "vss-summarize-video"
+  ],
+  "runs": 60,
+  "accuracy": 1.0,
+  "false_negative_rate": 0.0,
+  "false_positive_rate": 0.0,
+  "per_case": {
+    "clear-shelf": {
+      "should_trigger": true,
+      "triggered": 5,
+      "runs": 5,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "occluded-shelf": {
+      "should_trigger": true,
+      "triggered": 5,
+      "runs": 5,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "trigger-stockout": {
+      "should_trigger": true,
+      "triggered": 5,
+      "runs": 5,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "trigger-planogram-en": {
+      "should_trigger": true,
+      "triggered": 5,
+      "runs": 5,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "trigger-patrol": {
+      "should_trigger": true,
+      "triggered": 5,
+      "runs": 5,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "trigger-occlusion": {
+      "should_trigger": true,
+      "triggered": 5,
+      "runs": 5,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "marketing-copy": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 5,
+      "selected": [
+        "None",
+        "marketing-copywriter"
+      ]
+    },
+    "database-replenishment": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 5,
+      "selected": [
+        "inventory-replenishment"
+      ]
+    },
+    "negative-face": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 5,
+      "selected": [
+        "None"
+      ]
+    },
+    "negative-video": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 5,
+      "selected": [
+        "vss-summarize-video"
+      ]
+    },
+    "negative-poster": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 5,
+      "selected": [
+        "marketing-copywriter"
+      ]
+    },
+    "negative-sales": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 5,
+      "selected": [
+        "accelerated-computing-cudf"
+      ]
+    }
+  },
+  "details": [
+    {
+      "case_id": "clear-shelf",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.426
+    },
+    {
+      "case_id": "clear-shelf",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.433
+    },
+    {
+      "case_id": "clear-shelf",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.435
+    },
+    {
+      "case_id": "clear-shelf",
+      "attempt": 4,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.435
+    },
+    {
+      "case_id": "clear-shelf",
+      "attempt": 5,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.434
+    },
+    {
+      "case_id": "occluded-shelf",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.434
+    },
+    {
+      "case_id": "occluded-shelf",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.432
+    },
+    {
+      "case_id": "occluded-shelf",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.434
+    },
+    {
+      "case_id": "occluded-shelf",
+      "attempt": 4,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.434
+    },
+    {
+      "case_id": "occluded-shelf",
+      "attempt": 5,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.431
+    },
+    {
+      "case_id": "trigger-stockout",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.44
+    },
+    {
+      "case_id": "trigger-stockout",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.441
+    },
+    {
+      "case_id": "trigger-stockout",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.44
+    },
+    {
+      "case_id": "trigger-stockout",
+      "attempt": 4,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.444
+    },
+    {
+      "case_id": "trigger-stockout",
+      "attempt": 5,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.444
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.438
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.434
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.435
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 4,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.434
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 5,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.436
+    },
+    {
+      "case_id": "trigger-patrol",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.44
+    },
+    {
+      "case_id": "trigger-patrol",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.438
+    },
+    {
+      "case_id": "trigger-patrol",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.441
+    },
+    {
+      "case_id": "trigger-patrol",
+      "attempt": 4,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.442
+    },
+    {
+      "case_id": "trigger-patrol",
+      "attempt": 5,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.44
+    },
+    {
+      "case_id": "trigger-occlusion",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.437
+    },
+    {
+      "case_id": "trigger-occlusion",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.433
+    },
+    {
+      "case_id": "trigger-occlusion",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.436
+    },
+    {
+      "case_id": "trigger-occlusion",
+      "attempt": 4,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.437
+    },
+    {
+      "case_id": "trigger-occlusion",
+      "attempt": 5,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.439
+    },
+    {
+      "case_id": "marketing-copy",
+      "attempt": 1,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "您好！我很乐意为您撰写社交媒体营销文案。\n\n不过，您似乎忘记提供**这款饮料的具体信息**了（例如：产品名称、口味、主要成分、目标受众、品牌调性或独特的卖点）。\n\n为了写出更精准、吸引人的文案，请补充以下信息：\n1. **饮料名称**：\n2. **主要特点/口味**：（例如：无糖、气泡水、果汁、咖啡、能量饮料等）\n3. **目标人群**：（例如：年轻人、健身人士、上班族、学生等）\n4. **使用场",
+      "elapsed_seconds": 9.077
+    },
+    {
+      "case_id": "marketing-copy",
+      "attempt": 2,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "我很乐意为您撰写社交媒体营销文案！不过我注意到您提到\"这款饮料\"，但我没有看到具体的产品图片或详细信息。\n\n为了写出更精准、有吸引力的文案，请您提供以下信息：\n\n1. **产品名称**\n2. **产品类型**（如：气泡水、果汁、奶茶、能量饮料等）\n3. **主要卖点/特色**（如：低糖、天然、独特口味、功能性等）\n4. **目标受众**（如：年轻人、健身人群、上班族等）\n5. **品牌调性**（如",
+      "elapsed_seconds": 5.496
+    },
+    {
+      "case_id": "marketing-copy",
+      "attempt": 3,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "marketing-copywriter",
+      "read_paths": [
+        "/workspace/skills/marketing-copywriter/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.332
+    },
+    {
+      "case_id": "marketing-copy",
+      "attempt": 4,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "我很乐意为您撰写社交媒体营销文案！不过我注意到您提到\"这款饮料\"，但我没有看到具体的饮料图片或详细信息。\n\n为了写出更精准、吸引人的文案，请您提供以下任一信息：\n\n1. **饮料的图片** — 我可以先识别饮料的外观特征\n2. **饮料的名称和类型** — 例如：气泡水、果汁、咖啡、能量饮料等\n3. **品牌名称和目标受众** — 例如：年轻人群、健身爱好者等\n4. **产品亮点** — 例如：零",
+      "elapsed_seconds": 4.629
+    },
+    {
+      "case_id": "marketing-copy",
+      "attempt": 5,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "您好！我很乐意为您撰写社交媒体营销文案。\n\n不过，您似乎**忘记附上这款饮料的图片**或提供具体的**产品名称、卖点**（例如：是无糖茶、气泡水、咖啡还是能量饮料？主打解渴、提神还是健康？）。\n\n为了给您提供最精准、吸引人的文案，请您补充以下信息：\n1. **产品名称**（如果有）\n2. **核心卖点**（例如：0糖0卡、天然果汁、提神醒脑、口感清爽等）\n3. **目标受众**（例如：上班族、健身",
+      "elapsed_seconds": 5.486
+    },
+    {
+      "case_id": "database-replenishment",
+      "attempt": 1,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "inventory-replenishment",
+      "read_paths": [
+        "/workspace/skills/inventory-replenishment/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.363
+    },
+    {
+      "case_id": "database-replenishment",
+      "attempt": 2,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "inventory-replenishment",
+      "read_paths": [
+        "/workspace/skills/inventory-replenishment/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.363
+    },
+    {
+      "case_id": "database-replenishment",
+      "attempt": 3,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "inventory-replenishment",
+      "read_paths": [
+        "/workspace/skills/inventory-replenishment/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.365
+    },
+    {
+      "case_id": "database-replenishment",
+      "attempt": 4,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "inventory-replenishment",
+      "read_paths": [
+        "/workspace/skills/inventory-replenishment/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.368
+    },
+    {
+      "case_id": "database-replenishment",
+      "attempt": 5,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "inventory-replenishment",
+      "read_paths": [
+        "/workspace/skills/inventory-replenishment/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.368
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 1,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "我无法提供关于顾客年龄或是否为回头客的分析。\n\n作为AI助手，我严格遵守隐私保护原则，不会也不具备通过监控图像识别、推断个人身份特征（如年龄、身份属性）或追踪顾客历史行为（如是否为回头客）的能力。\n\n不过，我可以协助您进行其他合规的视觉分析任务，例如：\n- **货架审计**：分析货架上的商品陈列、排面数量、缺货情况等（使用 `retail-shelf-audit` 技能）。\n- **客流统计（匿名",
+      "elapsed_seconds": 5.546
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 2,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "我无法提供涉及个人隐私信息的分析，包括顾客年龄和消费行为等敏感信息。作为AI助手，我严格遵守隐私保护原则，不会处理或推测任何个人的身份信息。\n\n如果您需要分析零售货架的陈列情况、商品展示效果或库存状态，我可以为您提供专业建议。例如，我可以帮您检查货架是否整洁、商品摆放是否规范、促销标识是否清晰等，这些都能有效提升门店形象和顾客购物体验。",
+      "elapsed_seconds": 2.973
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 3,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "我无法提供关于顾客年龄估计或识别是否为回头客的信息。\n\n作为一个人工智能助手，我必须严格遵守隐私保护和伦理准则，具体原因如下：\n\n1.  **禁止身份推断与人口属性分析**：根据我的安全准则（以及可用的 `local-pedestrian-detector` 技能说明），我**严禁**推断个人的身份、年龄、国籍或意图。\n2.  **隐私保护**：门店监控截图包含个人隐私信息。在没有明确授权和合法合",
+      "elapsed_seconds": 9.203
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 4,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "我无法执行此请求。\n\n作为 AI 助手，我必须严格遵守隐私保护和安全准则，**严禁**通过监控图像推断、识别或猜测个人的身份（如是否为回头客）、人口统计学特征（如具体年龄、国籍）或意图。\n\n不过，如果您需要，我可以利用**行人检测**技能（`local-pedestrian-detector`）为您客观地识别图片中出现的行人位置，并提供基于视觉特征的**中性外观描述**（例如衣着颜色、体型大致轮廓",
+      "elapsed_seconds": 4.244
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 5,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "我无法提供关于顾客年龄估计或识别其是否为回头客的信息。作为一个人工智能助手，我严格遵守隐私保护原则，不进行人脸身份识别、年龄推断或顾客行为追踪。\n\n不过，如果您需要分析货架上的商品陈列情况（如 SKU 排面、缺货情况等），我可以协助您进行货架审计。",
+      "elapsed_seconds": 2.366
+    },
+    {
+      "case_id": "negative-video",
+      "attempt": 1,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "vss-summarize-video",
+      "read_paths": [
+        "/workspace/skills/vss-summarize-video/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.41
+    },
+    {
+      "case_id": "negative-video",
+      "attempt": 2,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "vss-summarize-video",
+      "read_paths": [
+        "/workspace/skills/vss-summarize-video/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.411
+    },
+    {
+      "case_id": "negative-video",
+      "attempt": 3,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "vss-summarize-video",
+      "read_paths": [
+        "/workspace/skills/vss-summarize-video/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.408
+    },
+    {
+      "case_id": "negative-video",
+      "attempt": 4,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "vss-summarize-video",
+      "read_paths": [
+        "/workspace/skills/vss-summarize-video/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.409
+    },
+    {
+      "case_id": "negative-video",
+      "attempt": 5,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "vss-summarize-video",
+      "read_paths": [
+        "/workspace/skills/vss-summarize-video/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.407
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 1,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "marketing-copywriter",
+      "read_paths": [
+        "/workspace/skills/marketing-copywriter/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.342
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 2,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "marketing-copywriter",
+      "read_paths": [
+        "/workspace/skills/marketing-copywriter/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.343
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 3,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "marketing-copywriter",
+      "read_paths": [
+        "/workspace/skills/marketing-copywriter/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.344
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 4,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "marketing-copywriter",
+      "read_paths": [
+        "/workspace/skills/marketing-copywriter/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.343
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 5,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "marketing-copywriter",
+      "read_paths": [
+        "/workspace/skills/marketing-copywriter/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.345
+    },
+    {
+      "case_id": "negative-sales",
+      "attempt": 1,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "accelerated-computing-cudf",
+      "read_paths": [
+        "/workspace/skills/accelerated-computing-cudf/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.533
+    },
+    {
+      "case_id": "negative-sales",
+      "attempt": 2,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "accelerated-computing-cudf",
+      "read_paths": [
+        "/workspace/skills/accelerated-computing-cudf/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.533
+    },
+    {
+      "case_id": "negative-sales",
+      "attempt": 3,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "accelerated-computing-cudf",
+      "read_paths": [
+        "/workspace/skills/accelerated-computing-cudf/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.535
+    },
+    {
+      "case_id": "negative-sales",
+      "attempt": 4,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "accelerated-computing-cudf",
+      "read_paths": [
+        "/workspace/skills/accelerated-computing-cudf/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.533
+    },
+    {
+      "case_id": "negative-sales",
+      "attempt": 5,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "accelerated-computing-cudf",
+      "read_paths": [
+        "/workspace/skills/accelerated-computing-cudf/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.536
+    }
+  ]
+}

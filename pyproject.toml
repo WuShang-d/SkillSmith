@@ -19,3 +19,6 @@ include = ["skillsmith*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.setuptools.package-data]
+skillsmith = ["data/*.json"]

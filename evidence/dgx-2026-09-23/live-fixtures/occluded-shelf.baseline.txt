@@ -1,0 +1,58 @@
+```json
+{
+  "image_quality": {
+    "usable": true,
+    "issues": [
+      "前景中的灰色周转箱遮挡了底层货架的大部分商品。"
+    ]
+  },
+  "sku_facings": [
+    {
+      "shelf": 1,
+      "sku": "红色罐装饮料",
+      "facings": 7
+    },
+    {
+      "shelf": 1,
+      "sku": "蓝色瓶装饮料",
+      "facings": 5
+    },
+    {
+      "shelf": 1,
+      "sku": "绿色盒装商品",
+      "facings": 4
+    },
+    {
+      "shelf": 2,
+      "sku": "绿色盒装商品",
+      "facings": 5
+    },
+    {
+      "shelf": 2,
+      "sku": "黄色袋装商品",
+      "facings": 5
+    },
+    {
+      "shelf": 2,
+      "sku": "红色罐装饮料",
+      "facings": 5
+    },
+    {
+      "shelf": 3,
+      "sku": "蓝色瓶装饮料",
+      "facings": 4
+    },
+    {
+      "shelf": 3,
+      "sku": "黄色袋装商品",
+      "facings": 3
+    }
+  ],
+  "empty_gaps": [],
+  "uncertainties": [
+    "底层货架左侧的蓝色瓶装饮料数量因遮挡无法精确计数。",
+    "底层货架中间被周转箱遮挡的区域，无法判断是否有商品或空位。",
+    "底层货架右侧的绿色盒装商品被部分遮挡，数量不确定。"
+  ]
+}
+```

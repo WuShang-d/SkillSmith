@@ -11,6 +11,8 @@ from .endpoint import capture_ab
 from .forge import forge
 from .install import install
 from .security import report, scan
+from .openclaw_trigger import evaluate_openclaw_triggers
+from .trigger import evaluate_triggers
 from .spec import SpecError, load_spec
 
 
@@ -32,8 +34,12 @@ def cmd_scan(args: argparse.Namespace) -> int:
     return int(result["verdict"] != "pass")
 
 
+def _load_trigger(path: str | None) -> dict[str, object] | None:
+    return json.loads(Path(path).read_text(encoding="utf-8")) if path else None
+
+
 def cmd_evaluate(args: argparse.Namespace) -> int:
-    result = evaluate_fixtures(args.skill, args.fixtures)
+    result = evaluate_fixtures(args.skill, args.fixtures, trigger_result=_load_trigger(args.trigger_result))
     skill_name = Path(args.skill).resolve().name
     benchmark = benchmark_markdown(result, skill_name)
     output = Path(args.output) if args.output else Path(args.skill) / "BENCHMARK.md"
@@ -59,6 +65,34 @@ def _capture(args: argparse.Namespace, skill: str | Path, output: str | Path) ->
         allow_remote=args.allow_remote_endpoint,
         timeout=args.timeout,
     )
+
+
+def _triggers(args: argparse.Namespace, skill: str | Path, output: str | Path) -> dict[str, object]:
+    if getattr(args, "harness", "router") == "openclaw":
+        if not args.input_root:
+            raise ValueError("--harness openclaw requires --input-root to stage attachments")
+        return evaluate_openclaw_triggers(
+            skill,
+            output,
+            input_root=args.input_root,
+            profile=args.openclaw_profile,
+            repeats=args.trigger_repeats,
+        )
+    return evaluate_triggers(
+        skill,
+        output,
+        base_url=args.base_url or os.environ.get("OPENAI_BASE_URL", ""),
+        model=args.model or os.environ.get("OPENAI_MODEL", ""),
+        api_key=os.environ.get("OPENAI_API_KEY", "local"),
+        repeats=args.trigger_repeats,
+        allow_remote=args.allow_remote_endpoint,
+    )
+
+
+def cmd_trigger_eval(args: argparse.Namespace) -> int:
+    result = _triggers(args, args.skill, args.output)
+    _json({key: value for key, value in result.items() if key != "details"})
+    return 0
 
 
 def cmd_capture(args: argparse.Namespace) -> int:
@@ -103,7 +137,8 @@ def cmd_live_pipeline(args: argparse.Namespace) -> int:
         _json({"status": "blocked", "stage": "security", **security_result})
         return 2
     capture = _capture(args, target, args.capture_dir)
-    evaluation = evaluate_fixtures(target, args.capture_dir)
+    triggers = _triggers(args, target, args.capture_dir)
+    evaluation = evaluate_fixtures(target, args.capture_dir, trigger_result=triggers)
     (target / "BENCHMARK.md").write_text(benchmark_markdown(evaluation, spec.name, mode="live"), encoding="utf-8")
     if evaluation["verdict"] != "pass":
         _json({"status": "blocked", "stage": "evaluation", "capture": capture, **evaluation})
@@ -128,6 +163,21 @@ def _add_endpoint_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--allow-remote-endpoint", action="store_true")
 
 
+def _add_trigger_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--harness",
+        choices=("router", "openclaw"),
+        default="router",
+        help="router: model decides from a skill catalogue via tool calls; openclaw: full OpenClaw agent turns",
+    )
+    parser.add_argument("--input-root", help="directory holding eval inputs (openclaw harness)")
+    parser.add_argument("--openclaw-profile", default="skillsmith-eval")
+    parser.add_argument("--base-url")
+    parser.add_argument("--model")
+    parser.add_argument("--trigger-repeats", type=int, default=3)
+    parser.add_argument("--allow-remote-endpoint", action="store_true")
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="skillsmith", description="Forge successful workflows into verified Agent Skills")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -147,7 +197,14 @@ def build_parser() -> argparse.ArgumentParser:
     eval_parser.add_argument("skill")
     eval_parser.add_argument("--fixtures", required=True)
     eval_parser.add_argument("--output")
+    eval_parser.add_argument("--trigger-result", help="TRIGGER.json from trigger-eval; otherwise a lexical estimate is reported")
     eval_parser.set_defaults(func=cmd_evaluate)
+
+    trigger_parser = sub.add_parser("trigger-eval", help="measure skill selection with the real model behind an agent-style router")
+    trigger_parser.add_argument("skill")
+    trigger_parser.add_argument("--output", required=True)
+    _add_trigger_arguments(trigger_parser)
+    trigger_parser.set_defaults(func=cmd_trigger_eval)
 
     install_parser = sub.add_parser("install", help="install a verified skill into an agent workspace")
     install_parser.add_argument("skill")
@@ -175,6 +232,7 @@ def build_parser() -> argparse.ArgumentParser:
     live.add_argument("--output", required=True)
     live.add_argument("--destination", required=True)
     live.add_argument("--force", action="store_true")
+    live.add_argument("--trigger-repeats", type=int, default=3)
     _add_endpoint_arguments(live)
     live.set_defaults(func=cmd_live_pipeline)
     return parser

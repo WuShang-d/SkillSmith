@@ -1,0 +1,57 @@
+```json
+{
+  "image_quality": {
+    "usable": true,
+    "issues": [
+      "第三层货架（最下层）被灰色周转箱严重遮挡，无法统计该区域商品排面。"
+    ]
+  },
+  "sku_facings": [
+    {
+      "shelf": 1,
+      "sku": "红色罐装饮料",
+      "facings": 7
+    },
+    {
+      "shelf": 1,
+      "sku": "蓝色瓶装饮料",
+      "facings": 5
+    },
+    {
+      "shelf": 1,
+      "sku": "绿色方形包装盒",
+      "facings": 4
+    },
+    {
+      "shelf": 2,
+      "sku": "绿色方形包装盒",
+      "facings": 5
+    },
+    {
+      "shelf": 2,
+      "sku": "黄色立式包装袋",
+      "facings": 5
+    },
+    {
+      "shelf": 2,
+      "sku": "红色罐装饮料",
+      "facings": 5
+    },
+    {
+      "shelf": 3,
+      "sku": "蓝色瓶装饮料",
+      "facings": 5
+    },
+    {
+      "shelf": 3,
+      "sku": "黄色立式包装袋",
+      "facings": 3
+    }
+  ],
+  "empty_gaps": [],
+  "uncertainties": [
+    "第三层货架（最下层）大部分区域被灰色周转箱遮挡，无法统计箱后及箱内的商品排面。",
+    "周转箱内可见少量红色罐装饮料和黄色包装袋，但无法确定其是否为货架排面，故未计入。"
+  ]
+}
+```

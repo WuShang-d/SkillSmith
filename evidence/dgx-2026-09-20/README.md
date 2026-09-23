@@ -1,5 +1,13 @@
 # DGX live evidence — 2026-09-20
 
+> **Superseded — do not quote these numbers.** In this run the baseline system
+> prompt did not include the output format, while the rubric only checked the
+> contract's field names. The 23.6% → 100% "improvement" therefore measured
+> whether the model was told the field names, not whether the skill helped.
+> The fair re-run, with ground-truth scoring and a baseline that receives the
+> same output format, is in `evidence/dgx-2026-09-23/`. This snapshot is kept
+> unchanged as a historical record.
+
 This directory is the immutable evidence snapshot from the successful live
 SkillSmith run on the competition DGX Spark.
 

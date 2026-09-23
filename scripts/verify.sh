@@ -7,7 +7,7 @@ cd "$project_dir"
 export PYTHONPYCACHEPREFIX="${TMPDIR:-/tmp}/skillsmith-pycache"
 
 python3 -m unittest discover -s tests -v
-bash -n scripts/start-vllm-dgx.sh scripts/wait-vllm-dgx.sh scripts/demo-dgx.sh
+bash -n scripts/start-vllm-dgx.sh scripts/wait-vllm-dgx.sh scripts/demo-dgx.sh scripts/setup-openclaw-dgx.sh
 python3 -m skillsmith.cli pipeline \
   examples/retail-shelf-audit/workflow.json \
   --fixtures examples/retail-shelf-audit/fixtures \

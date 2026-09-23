@@ -2,9 +2,9 @@
   "schema_version": "1.0",
   "name": "retail-shelf-audit",
   "display_name": "零售货架巡检",
-  "description": "Inspect a retail shelf image and return visible SKU facings, empty gaps, image quality, and uncertainties as structured JSON.",
+  "description": "Inspect a retail shelf photo and return front-row SKU facings per shelf, empty gaps, image quality, and uncertainties as structured JSON.",
   "license": "Apache-2.0",
-  "successful_run_summary": "A local multimodal model correctly audited a shelf photo, counted visible facings, marked empty gaps, and separated uncertain observations from confirmed evidence.",
+  "successful_run_summary": "A local multimodal model audited a shelf photo shelf by shelf, counted only front-row facings, ignored products outside the shelf, marked empty gaps, and separated occluded areas into uncertainties.",
   "triggers": [
     "审计或巡检一张零售货架照片",
     "统计货架上各 SKU 的可见排面",
@@ -19,25 +19,33 @@
   "steps": [
     {
       "title": "检查输入质量",
-      "instruction": "先判断图片清晰度、遮挡和拍摄范围；无法可靠观察时明确标记，不补猜画外内容。"
+      "instruction": "先判断图片清晰度、遮挡和拍摄范围；标出被遮挡的层和位置，不补猜画外或遮挡后的内容。"
     },
     {
-      "title": "盘点可见排面",
-      "instruction": "按可见标签或包装特征分组，只统计能够从像素证实的 SKU 排面数量。"
+      "title": "逐层划分货架",
+      "instruction": "从上到下给货架层编号，最上层为 1；逐层、从左到右处理，不要跨层合并。"
+    },
+    {
+      "title": "只数最前排排面",
+      "instruction": "一个排面是货架最前沿的一列商品。上下叠放的同款商品仍算一个排面，后排露出的瓶盖或罐顶不算新排面。只统计能从像素证实的列。"
+    },
+    {
+      "title": "排除非货架商品",
+      "instruction": "购物车、周转箱、推车或手中的商品不是货架排面，不得计入；如有，写入 uncertainties。"
     },
     {
       "title": "识别空位",
-      "instruction": "记录货架上明显连续的空缺区域及其相对位置，不把价格牌间隙误判为空位。"
+      "instruction": "只有露出空隔板、宽度至少能放下一个排面的连续区域才算空位；价签间隙、商品之间的正常缝隙不算。记录空位所在层和左/中/右位置。"
     },
     {
       "title": "输出审计结果",
-      "instruction": "返回严格 JSON，分别给出图片质量、SKU 排面、空位和不确定项。"
+      "instruction": "按输出契约返回严格 JSON；被遮挡的层只报告可见排面，并在 uncertainties 中说明遮挡的层和位置。"
     }
   ],
   "guardrails": [
-    "只报告图片中可见的证据，不推断画外库存。",
+    "只报告图片中可见的证据，不推断画外或遮挡后的库存。",
     "不得识别或推断顾客身份、年龄、性别、国籍或行为意图。",
-    "标签不可读时使用可复核的视觉描述，并写入 uncertainties。",
+    "标签不可读时使用可复核的视觉描述（颜色＋包装类型），并写入 uncertainties。",
     "不得输出输入图片的 base64 数据或任何运行时凭据。"
   ],
   "output_contract": {
@@ -47,8 +55,10 @@
       "sku_facings",
       "empty_gaps",
       "uncertainties"
-    ]
+    ],
+    "schema_hint": "{\"image_quality\": {\"usable\": true, \"issues\": [\"...\"]}, \"sku_facings\": [{\"shelf\": 1, \"sku\": \"colour + package type\", \"facings\": 0}], \"empty_gaps\": [{\"shelf\": 1, \"position\": \"left|center|right\", \"approx_facings\": 0}], \"uncertainties\": [\"...\"]}  Shelf 1 is the top shelf."
   },
+  "scorer": "scorer.py",
   "evals": [
     {
       "id": "clear-shelf",
@@ -56,7 +66,18 @@
       "input": "shelf-clear.png",
       "should_trigger": true,
       "expected_contains": ["image_quality", "sku_facings", "empty_gaps", "uncertainties"],
-      "forbidden_contains": ["customer_identity", "api_key"]
+      "forbidden_contains": ["customer_identity", "api_key"],
+      "ground_truth": {
+        "facings": {
+          "1": {"red_can": [7, 7], "blue_bottle": [7, 7], "green_box": [6, 6]},
+          "2": {"yellow_pouch": [4, 4], "red_can": [5, 5], "blue_bottle": [3, 4]},
+          "3": {"green_box": [5, 5], "blue_bottle": [6, 6], "yellow_pouch": [3, 3], "red_can": [3, 3]}
+        },
+        "gaps": [
+          {"shelf": 2, "positions": ["center", "right"]}
+        ],
+        "occluded_shelves": []
+      }
     },
     {
       "id": "occluded-shelf",
@@ -64,7 +85,42 @@
       "input": "shelf-occluded.png",
       "should_trigger": true,
       "expected_contains": ["image_quality", "sku_facings", "uncertainties"],
-      "forbidden_contains": ["customer_identity", "api_key"]
+      "forbidden_contains": ["customer_identity", "api_key"],
+      "ground_truth": {
+        "facings": {
+          "1": {"red_can": [8, 8], "blue_bottle": [5, 5], "green_box": [4, 4]},
+          "2": {"green_box": [5, 5], "yellow_pouch": [5, 5], "red_can": [5, 5]},
+          "3": {"blue_bottle": [4, 5], "green_box": [1, 5], "yellow_pouch": [3, 5]}
+        },
+        "gaps": [
+          {"shelf": 1, "positions": ["right"]}
+        ],
+        "occluded_shelves": [3]
+      }
+    },
+    {
+      "id": "trigger-stockout",
+      "kind": "trigger",
+      "prompt": "[附件: inbox/store-0921-aisle3.jpg] 店长刚拍了这排饮料货架，帮我看看哪里缺货、每种货各摆了几列。",
+      "should_trigger": true
+    },
+    {
+      "id": "trigger-planogram-en",
+      "kind": "trigger",
+      "prompt": "Attached is a photo of our snack aisle (inbox/aisle7.png). Count the facings per product on each shelf and flag empty spots as JSON.",
+      "should_trigger": true
+    },
+    {
+      "id": "trigger-patrol",
+      "kind": "trigger",
+      "prompt": "这是今天早班巡店拍的货架图 inbox/patrol-0801.png，按层输出排面和空位，给区域经理看。",
+      "should_trigger": true
+    },
+    {
+      "id": "trigger-occlusion",
+      "kind": "trigger",
+      "prompt": "inbox/shelf-cart.jpg 这张货架照片下层被推车挡住了一部分，能看到的部分帮我盘一下排面。",
+      "should_trigger": true
     },
     {
       "id": "marketing-copy",
@@ -74,6 +130,30 @@
     {
       "id": "database-replenishment",
       "prompt": "读取库存数据库并生成补货单，不需要查看货架照片。",
+      "should_trigger": false
+    },
+    {
+      "id": "negative-face",
+      "kind": "trigger",
+      "prompt": "[附件: inbox/store-cam-1402.jpg] 这是门店监控截图，帮我判断货架前那几位顾客大概多大年纪、是不是回头客。",
+      "should_trigger": false
+    },
+    {
+      "id": "negative-video",
+      "kind": "trigger",
+      "prompt": "把 inbox/aisle3-0900-1000.mp4 这一小时的货架监控视频做个摘要，说说期间发生了什么。",
+      "should_trigger": false
+    },
+    {
+      "id": "negative-poster",
+      "kind": "trigger",
+      "prompt": "[附件: inbox/new-cola.png] 根据这张新品包装图，设计一张货架端头的促销海报文案。",
+      "should_trigger": false
+    },
+    {
+      "id": "negative-sales",
+      "kind": "trigger",
+      "prompt": "用 data/sales_q3.csv 算一下各门店饮料品类的周销量环比，画个折线图。",
       "should_trigger": false
     }
   ]

@@ -1,0 +1,544 @@
+{
+  "method": "openclaw",
+  "harness": "OpenClaw 2026.9.5 (ec9c1a1)",
+  "profile": "skillsmith-eval",
+  "repeats": 3,
+  "runs": 36,
+  "accuracy": 1.0,
+  "false_negative_rate": 0.0,
+  "false_positive_rate": 0.0,
+  "per_case": {
+    "clear-shelf": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "occluded-shelf": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "trigger-stockout": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "trigger-planogram-en": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "trigger-patrol": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "trigger-occlusion": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "marketing-copy": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    },
+    "database-replenishment": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    },
+    "negative-face": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    },
+    "negative-video": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    },
+    "negative-poster": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    },
+    "negative-sales": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    }
+  },
+  "details": [
+    {
+      "case_id": "clear-shelf",
+      "attempt": 1,
+      "session_id": "skillsmith-clear-shelf-1-e9543cae",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 52.266
+    },
+    {
+      "case_id": "clear-shelf",
+      "attempt": 2,
+      "session_id": "skillsmith-clear-shelf-2-57f27eb9",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 43.04
+    },
+    {
+      "case_id": "clear-shelf",
+      "attempt": 3,
+      "session_id": "skillsmith-clear-shelf-3-87e60c0f",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 51.652
+    },
+    {
+      "case_id": "occluded-shelf",
+      "attempt": 1,
+      "session_id": "skillsmith-occluded-shelf-1-124a1536",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "skill_workshop:/skills/retail-shelf-audit/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 70.944
+    },
+    {
+      "case_id": "occluded-shelf",
+      "attempt": 2,
+      "session_id": "skillsmith-occluded-shelf-2-9ce55bf9",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 56.774
+    },
+    {
+      "case_id": "occluded-shelf",
+      "attempt": 3,
+      "session_id": "skillsmith-occluded-shelf-3-66453557",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 62.583
+    },
+    {
+      "case_id": "trigger-stockout",
+      "attempt": 1,
+      "session_id": "skillsmith-trigger-stockout-1-6c2e7402",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 38.348
+    },
+    {
+      "case_id": "trigger-stockout",
+      "attempt": 2,
+      "session_id": "skillsmith-trigger-stockout-2-0a9fbf23",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "skill_workshop:/skills/retail-shelf-audit/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 45.267
+    },
+    {
+      "case_id": "trigger-stockout",
+      "attempt": 3,
+      "session_id": "skillsmith-trigger-stockout-3-6133c45c",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 46.456
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 1,
+      "session_id": "skillsmith-trigger-planogram-en-1-d24f3a4b",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 24.602
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 2,
+      "session_id": "skillsmith-trigger-planogram-en-2-e081b896",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 19.658
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 3,
+      "session_id": "skillsmith-trigger-planogram-en-3-8728e455",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 20.345
+    },
+    {
+      "case_id": "trigger-patrol",
+      "attempt": 1,
+      "session_id": "skillsmith-trigger-patrol-1-51a32bcf",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 21.099
+    },
+    {
+      "case_id": "trigger-patrol",
+      "attempt": 2,
+      "session_id": "skillsmith-trigger-patrol-2-f4fa47f0",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 26.516
+    },
+    {
+      "case_id": "trigger-patrol",
+      "attempt": 3,
+      "session_id": "skillsmith-trigger-patrol-3-40d34fff",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 22.971
+    },
+    {
+      "case_id": "trigger-occlusion",
+      "attempt": 1,
+      "session_id": "skillsmith-trigger-occlusion-1-7cf30b50",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 17.342
+    },
+    {
+      "case_id": "trigger-occlusion",
+      "attempt": 2,
+      "session_id": "skillsmith-trigger-occlusion-2-20e6626d",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 84.474
+    },
+    {
+      "case_id": "trigger-occlusion",
+      "attempt": 3,
+      "session_id": "skillsmith-trigger-occlusion-3-5d238e71",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 60.59
+    },
+    {
+      "case_id": "marketing-copy",
+      "attempt": 1,
+      "session_id": "skillsmith-marketing-copy-1-28060af3",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 12.285
+    },
+    {
+      "case_id": "marketing-copy",
+      "attempt": 2,
+      "session_id": "skillsmith-marketing-copy-2-47837b7c",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 13.702
+    },
+    {
+      "case_id": "marketing-copy",
+      "attempt": 3,
+      "session_id": "skillsmith-marketing-copy-3-087b3d31",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 41.156
+    },
+    {
+      "case_id": "database-replenishment",
+      "attempt": 1,
+      "session_id": "skillsmith-database-replenishment-1-cbca4f75",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 213.123
+    },
+    {
+      "case_id": "database-replenishment",
+      "attempt": 2,
+      "session_id": "skillsmith-database-replenishment-2-a3ca7bf9",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 224.537
+    },
+    {
+      "case_id": "database-replenishment",
+      "attempt": 3,
+      "session_id": "skillsmith-database-replenishment-3-4897577b",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 80.04
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 1,
+      "session_id": "skillsmith-negative-face-1-b7b572c5",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 26.04
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 2,
+      "session_id": "skillsmith-negative-face-2-24ac7f60",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 15.162
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 3,
+      "session_id": "skillsmith-negative-face-3-7720c149",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 18.609
+    },
+    {
+      "case_id": "negative-video",
+      "attempt": 1,
+      "session_id": "skillsmith-negative-video-1-7af56e06",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 28.59
+    },
+    {
+      "case_id": "negative-video",
+      "attempt": 2,
+      "session_id": "skillsmith-negative-video-2-383054e0",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 16.074
+    },
+    {
+      "case_id": "negative-video",
+      "attempt": 3,
+      "session_id": "skillsmith-negative-video-3-d5342632",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 19.238
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 1,
+      "session_id": "skillsmith-negative-poster-1-4b1496fe",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 47.1
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 2,
+      "session_id": "skillsmith-negative-poster-2-3664894b",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 38.882
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 3,
+      "session_id": "skillsmith-negative-poster-3-7523fd8d",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 34.588
+    },
+    {
+      "case_id": "negative-sales",
+      "attempt": 1,
+      "session_id": "skillsmith-negative-sales-1-1fa163c5",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 1,
+      "elapsed_seconds": 243.062
+    },
+    {
+      "case_id": "negative-sales",
+      "attempt": 2,
+      "session_id": "skillsmith-negative-sales-2-179f9cda",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 1,
+      "elapsed_seconds": 243.164
+    },
+    {
+      "case_id": "negative-sales",
+      "attempt": 3,
+      "session_id": "skillsmith-negative-sales-3-dd420baf",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 1,
+      "elapsed_seconds": 243.042
+    }
+  ]
+}

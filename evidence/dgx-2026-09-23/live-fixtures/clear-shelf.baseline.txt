@@ -1,0 +1,71 @@
+```json
+{
+  "image_quality": {
+    "usable": true,
+    "issues": []
+  },
+  "sku_facings": [
+    {
+      "shelf": 1,
+      "sku": "red cans",
+      "facings": 7
+    },
+    {
+      "shelf": 1,
+      "sku": "blue water bottles",
+      "facings": 7
+    },
+    {
+      "shelf": 1,
+      "sku": "green juice boxes",
+      "facings": 6
+    },
+    {
+      "shelf": 2,
+      "sku": "yellow chip bags",
+      "facings": 4
+    },
+    {
+      "shelf": 2,
+      "sku": "red cans",
+      "facings": 5
+    },
+    {
+      "shelf": 2,
+      "sku": "blue water bottles",
+      "facings": 4
+    },
+    {
+      "shelf": 3,
+      "sku": "green juice boxes",
+      "facings": 5
+    },
+    {
+      "shelf": 3,
+      "sku": "blue water bottles",
+      "facings": 6
+    },
+    {
+      "shelf": 3,
+      "sku": "yellow chip bags",
+      "facings": 3
+    },
+    {
+      "shelf": 3,
+      "sku": "red cans",
+      "facings": 3
+    }
+  ],
+  "empty_gaps": [
+    {
+      "shelf": 2,
+      "position": "center",
+      "approx_facings": 4
+    }
+  ],
+  "uncertainties": [
+    "The red cans on the bottom shelf are in a wire basket, making it difficult to count the exact number of facings precisely.",
+    "The blue water bottles on the top shelf are stacked two-high, but the count of facings is based on the front row."
+  ]
+}
+```

@@ -1,0 +1,70 @@
+```json
+{
+  "image_quality": {
+    "usable": true,
+    "issues": []
+  },
+  "sku_facings": [
+    {
+      "shelf": 1,
+      "sku": "红色罐装饮料",
+      "facings": 7
+    },
+    {
+      "shelf": 1,
+      "sku": "蓝色瓶装水",
+      "facings": 7
+    },
+    {
+      "shelf": 1,
+      "sku": "绿色叶纹纸盒",
+      "facings": 7
+    },
+    {
+      "shelf": 2,
+      "sku": "黄色薯片袋",
+      "facings": 4
+    },
+    {
+      "shelf": 2,
+      "sku": "红色罐装饮料",
+      "facings": 5
+    },
+    {
+      "shelf": 2,
+      "sku": "蓝色瓶装水",
+      "facings": 4
+    },
+    {
+      "shelf": 3,
+      "sku": "绿色叶纹纸盒",
+      "facings": 5
+    },
+    {
+      "shelf": 3,
+      "sku": "蓝色瓶装水",
+      "facings": 6
+    },
+    {
+      "shelf": 3,
+      "sku": "黄色薯片袋",
+      "facings": 3
+    },
+    {
+      "shelf": 3,
+      "sku": "红色罐装饮料",
+      "facings": 3
+    }
+  ],
+  "empty_gaps": [
+    {
+      "shelf": 2,
+      "position": "center",
+      "approx_facings": 4
+    }
+  ],
+  "uncertainties": [
+    "货架3最右侧的红色罐装饮料位于金属网篮内，可能属于非标准货架陈列。"
+  ]
+}
+```

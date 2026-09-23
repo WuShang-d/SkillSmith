@@ -1,0 +1,126 @@
+{
+  "status": "blocked",
+  "stage": "evaluation",
+  "capture": {
+    "mode": "live",
+    "endpoint": "http://127.0.0.1:8000/v1",
+    "model": "Qwen/Qwen3.6-35B-A3B",
+    "captures": [
+      {
+        "case_id": "clear-shelf",
+        "mode": "baseline",
+        "elapsed_seconds": 16.304,
+        "output_path": "/home/Developer/skillsmith/build/dgx/live-fixtures/clear-shelf.baseline.txt",
+        "prompt_tokens": 1737,
+        "completion_tokens": 471
+      },
+      {
+        "case_id": "clear-shelf",
+        "mode": "skill",
+        "elapsed_seconds": 15.634,
+        "output_path": "/home/Developer/skillsmith/build/dgx/live-fixtures/clear-shelf.skill.txt",
+        "prompt_tokens": 3239,
+        "completion_tokens": 451
+      },
+      {
+        "case_id": "occluded-shelf",
+        "mode": "baseline",
+        "elapsed_seconds": 13.697,
+        "output_path": "/home/Developer/skillsmith/build/dgx/live-fixtures/occluded-shelf.baseline.txt",
+        "prompt_tokens": 1730,
+        "completion_tokens": 400
+      },
+      {
+        "case_id": "occluded-shelf",
+        "mode": "skill",
+        "elapsed_seconds": 14.208,
+        "output_path": "/home/Developer/skillsmith/build/dgx/live-fixtures/occluded-shelf.skill.txt",
+        "prompt_tokens": 3232,
+        "completion_tokens": 409
+      }
+    ]
+  },
+  "verdict": "fail",
+  "primary_metric": "task",
+  "trigger_accuracy": 1.0,
+  "trigger": {
+    "method": "agent-router",
+    "accuracy": 1.0,
+    "runs": 60,
+    "false_positive_rate": 0.0,
+    "false_negative_rate": 0.0
+  },
+  "baseline_score": 0.827,
+  "skill_score": 0.823,
+  "improvement": -0.004,
+  "contract": {
+    "baseline": 1.0,
+    "skill": 1.0
+  },
+  "task": {
+    "baseline": 0.827,
+    "skill": 0.823
+  },
+  "task_metrics": {
+    "facing_accuracy": {
+      "baseline": 0.982,
+      "skill": 0.974
+    },
+    "gap_f1": {
+      "baseline": 0.5,
+      "skill": 0.5
+    },
+    "occlusion_reported": {
+      "baseline": 1.0,
+      "skill": 1.0
+    }
+  },
+  "efficiency": {
+    "baseline": {
+      "mean_latency_seconds": 15.0,
+      "mean_completion_tokens": 435.5
+    },
+    "skill": {
+      "mean_latency_seconds": 14.921,
+      "mean_completion_tokens": 430.0
+    }
+  },
+  "cases": [
+    {
+      "id": "clear-shelf",
+      "baseline_contract": 1.0,
+      "baseline_notes": [],
+      "baseline_task": 1.0,
+      "baseline_metrics": {
+        "facing_accuracy": 1.0,
+        "gap_f1": 1.0
+      },
+      "skill_contract": 1.0,
+      "skill_notes": [],
+      "skill_task": 0.992,
+      "skill_metrics": {
+        "facing_accuracy": 0.983,
+        "gap_f1": 1.0
+      }
+    },
+    {
+      "id": "occluded-shelf",
+      "baseline_contract": 1.0,
+      "baseline_notes": [],
+      "baseline_task": 0.655,
+      "baseline_metrics": {
+        "facing_accuracy": 0.964,
+        "gap_f1": 0.0,
+        "occlusion_reported": 1.0
+      },
+      "skill_contract": 1.0,
+      "skill_notes": [],
+      "skill_task": 0.655,
+      "skill_metrics": {
+        "facing_accuracy": 0.964,
+        "gap_f1": 0.0,
+        "occlusion_reported": 1.0
+      }
+    }
+  ]
+}

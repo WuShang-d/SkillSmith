@@ -27,6 +27,16 @@ class WorkflowSpec:
     def description(self) -> str:
         return str(self.data["description"])
 
+    @property
+    def scorer_path(self) -> Path | None:
+        scorer = self.data.get("scorer")
+        return (self.source.parent / scorer).resolve() if scorer else None
+
+
+def is_output_case(case: dict[str, Any]) -> bool:
+    """Positive cases are output-scored unless they only test trigger selection."""
+    return bool(case.get("should_trigger")) and case.get("kind", "output") == "output"
+
 
 def _require_text(data: dict[str, Any], key: str) -> str:
     value = data.get(key)
@@ -84,6 +94,20 @@ def load_spec(path: str | Path) -> WorkflowSpec:
     required_fields = output.get("required_fields", [])
     if not isinstance(required_fields, list) or any(not isinstance(x, str) for x in required_fields):
         raise SpecError("output_contract.required_fields must be a list of strings")
+    if "schema_hint" in output and not isinstance(output["schema_hint"], str):
+        raise SpecError("output_contract.schema_hint must be text")
+
+    scorer = data.get("scorer")
+    if scorer is not None:
+        if not isinstance(scorer, str) or not scorer.endswith(".py"):
+            raise SpecError("scorer must be a relative path to a .py file")
+        scorer_path = (source.parent / scorer).resolve()
+        try:
+            scorer_path.relative_to(source.parent)
+        except ValueError as exc:
+            raise SpecError("scorer must stay beneath the workflow directory") from exc
+        if not scorer_path.is_file():
+            raise SpecError(f"scorer does not exist: {scorer_path}")
 
     evals = data.get("evals")
     if not isinstance(evals, list) or len(evals) < 2:
@@ -102,6 +126,13 @@ def load_spec(path: str | Path) -> WorkflowSpec:
             raise SpecError(f"eval {case_id}: should_trigger must be boolean")
         if "input" in case and (not isinstance(case["input"], str) or not case["input"].strip()):
             raise SpecError(f"eval {case_id}: input must be non-empty text when provided")
+        if case.get("kind", "output") not in {"output", "trigger"}:
+            raise SpecError(f"eval {case_id}: kind must be 'output' or 'trigger'")
+        if "ground_truth" in case:
+            if not isinstance(case["ground_truth"], dict):
+                raise SpecError(f"eval {case_id}: ground_truth must be an object")
+            if scorer is None:
+                raise SpecError(f"eval {case_id}: ground_truth requires a top-level scorer")
         positives += int(case["should_trigger"])
         negatives += int(not case["should_trigger"])
     if not positives or not negatives:

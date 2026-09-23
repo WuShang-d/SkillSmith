@@ -97,10 +97,27 @@ Images are restricted to the declared input root. Endpoints are restricted to lo
 
 The two shelf images are synthetic, brandless evaluation assets generated specifically for this project. Their prompts, provenance, and hashes are recorded in `examples/retail-shelf-audit/ASSET_NOTES.md`; they are not presented as real store data.
 
-## Verified DGX result
+## Measuring triggering with a real agent
 
-The archived competition-node run completed the live gated flow in 78 seconds
-after model readiness. Contract score improved from 23.6% to 100%, trigger
-accuracy was 100%, the security scan passed with zero findings, and the second
-image replay satisfied all required fields. Raw outputs, latencies, reports,
-and chain-of-custody details are preserved in `evidence/dgx-2026-09-20/`.
+```bash
+python3 -m skillsmith.cli trigger-eval GENERATED/retail-shelf-audit --output build/trigger          # agent router + neighbouring skills
+./scripts/setup-openclaw-dgx.sh                                                                     # once, on the DGX
+python3 -m skillsmith.cli trigger-eval GENERATED/retail-shelf-audit --output build/trigger-openclaw \
+  --harness openclaw --input-root examples/retail-shelf-audit                                        # full OpenClaw agent turns
+```
+
+## Verified DGX result (2026-09-23)
+
+Fair A/B on the competition DGX Spark: both conditions get the same image,
+request and output format; outputs are scored against annotated ground truth.
+
+| | Baseline | With skill |
+| --- | ---: | ---: |
+| Task score vs ground truth | 82.7% | 82.3% |
+| OpenClaw trigger accuracy (36 agent runs) | – | 100% |
+
+The gate **blocked** installation: the retail skill is discoverable and safe,
+but Qwen3.6 audits these two images equally well without it. Details, raw
+outputs and OpenClaw transcripts: `evidence/dgx-2026-09-23/`. The earlier
+"23.6% → 100%" figure (`evidence/dgx-2026-09-20/`) is superseded: that baseline
+was never told the output format.

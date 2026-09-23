@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
+
+from .spec import is_output_case
 
 
 TOKEN_RE = re.compile(r"[a-z0-9\u4e00-\u9fff]+", re.IGNORECASE)
@@ -75,67 +78,175 @@ def score_output(text: str, case: dict[str, Any], contract: dict[str, Any]) -> t
     return (sum(checks) / len(checks) if checks else 1.0), notes
 
 
-def evaluate_fixtures(skill_dir: str | Path, fixture_dir: str | Path) -> dict[str, Any]:
+def load_scorer(skill_root: Path) -> Callable[[dict[str, Any], dict[str, Any]], dict[str, float]] | None:
+    path = skill_root / "evals/scorer.py"
+    if not path.is_file():
+        return None
+    module_spec = importlib.util.spec_from_file_location(f"skillsmith_scorer_{skill_root.name}", path)
+    if module_spec is None or module_spec.loader is None:
+        raise ValueError(f"cannot load scorer: {path}")
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+    if not callable(getattr(module, "score", None)):
+        raise ValueError(f"scorer must define score(output, ground_truth): {path}")
+    return module.score
+
+
+def score_task(text: str, case: dict[str, Any], contract: dict[str, Any], scorer) -> dict[str, float]:
+    try:
+        parsed = _parse_output(text, contract["format"])
+    except (json.JSONDecodeError, ValueError):
+        parsed = None
+    if not isinstance(parsed, dict):
+        return {name: 0.0 for name in scorer({}, case["ground_truth"])}
+    return {name: float(value) for name, value in scorer(parsed, case["ground_truth"]).items()}
+
+
+def _mean(values: list[float]) -> float:
+    return sum(values) / len(values) if values else 0.0
+
+
+def efficiency_summary(fixtures: Path) -> dict[str, Any] | None:
+    manifest_path = fixtures / "CAPTURE.json"
+    if not manifest_path.is_file():
+        return None
+    captures = json.loads(manifest_path.read_text(encoding="utf-8")).get("captures", [])
+    summary: dict[str, Any] = {}
+    for mode in ("baseline", "skill"):
+        rows = [row for row in captures if row.get("mode") == mode]
+        tokens = [row["completion_tokens"] for row in rows if isinstance(row.get("completion_tokens"), int)]
+        summary[mode] = {
+            "mean_latency_seconds": round(_mean([row["elapsed_seconds"] for row in rows]), 3),
+            "mean_completion_tokens": round(_mean(tokens), 1) if tokens else None,
+        }
+    return summary
+
+
+def evaluate_fixtures(
+    skill_dir: str | Path,
+    fixture_dir: str | Path,
+    *,
+    trigger_result: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     skill_root = Path(skill_dir).resolve()
     fixtures = Path(fixture_dir).resolve()
     evals = json.loads((skill_root / "evals/evals.json").read_text(encoding="utf-8"))["cases"]
     workflow = json.loads((skill_root / "references/workflow.json").read_text(encoding="utf-8"))
-    trigger_hits = []
-    positive_rows = []
-    baseline_scores: list[float] = []
-    skill_scores: list[float] = []
+    contract = workflow["output_contract"]
+    scorer = load_scorer(skill_root)
+    lexical_hits = []
+    rows = []
+    contract_scores: dict[str, list[float]] = {"baseline": [], "skill": []}
+    task_scores: dict[str, list[float]] = {"baseline": [], "skill": []}
+    metric_scores: dict[str, dict[str, list[float]]] = {}
     for case in evals:
         predicted = predicts_trigger(case["prompt"], workflow["triggers"], workflow["negative_triggers"])
-        trigger_hits.append(predicted == case["should_trigger"])
-        row: dict[str, Any] = {
-            "id": case["id"],
-            "should_trigger": case["should_trigger"],
-            "predicted_trigger": predicted,
-        }
-        if case["should_trigger"]:
-            baseline_text = (fixtures / f"{case['id']}.baseline.txt").read_text(encoding="utf-8")
-            skill_text = (fixtures / f"{case['id']}.skill.txt").read_text(encoding="utf-8")
-            baseline, baseline_notes = score_output(baseline_text, case, workflow["output_contract"])
-            with_skill, skill_notes = score_output(skill_text, case, workflow["output_contract"])
-            baseline_scores.append(baseline)
-            skill_scores.append(with_skill)
-            row.update({
-                "baseline_score": round(baseline, 3),
-                "skill_score": round(with_skill, 3),
-                "delta": round(with_skill - baseline, 3),
-                "baseline_notes": baseline_notes,
-                "skill_notes": skill_notes,
-            })
-        positive_rows.append(row)
+        lexical_hits.append(predicted == case["should_trigger"])
+        if not is_output_case(case):
+            continue
+        row: dict[str, Any] = {"id": case["id"]}
+        for mode in ("baseline", "skill"):
+            text = (fixtures / f"{case['id']}.{mode}.txt").read_text(encoding="utf-8")
+            value, notes = score_output(text, case, contract)
+            contract_scores[mode].append(value)
+            row[f"{mode}_contract"] = round(value, 3)
+            row[f"{mode}_notes"] = notes
+            if scorer and "ground_truth" in case:
+                metrics = score_task(text, case, contract, scorer)
+                task_scores[mode].append(_mean(list(metrics.values())))
+                row[f"{mode}_task"] = round(_mean(list(metrics.values())), 3)
+                row[f"{mode}_metrics"] = {name: round(v, 3) for name, v in metrics.items()}
+                for name, v in metrics.items():
+                    metric_scores.setdefault(name, {"baseline": [], "skill": []})[mode].append(v)
+        rows.append(row)
 
-    baseline = sum(baseline_scores) / len(baseline_scores) if baseline_scores else 0.0
-    with_skill = sum(skill_scores) / len(skill_scores) if skill_scores else 0.0
-    trigger_accuracy = sum(trigger_hits) / len(trigger_hits) if trigger_hits else 0.0
+    contract_summary = {mode: round(_mean(values), 3) for mode, values in contract_scores.items()}
+    has_task = bool(task_scores["skill"])
+    task_summary = {mode: round(_mean(values), 3) for mode, values in task_scores.items()} if has_task else None
+    primary = task_summary or contract_summary
+
+    if trigger_result is not None:
+        trigger = {
+            "method": trigger_result["method"],
+            "accuracy": trigger_result["accuracy"],
+            "runs": trigger_result["runs"],
+            "false_positive_rate": trigger_result["false_positive_rate"],
+            "false_negative_rate": trigger_result["false_negative_rate"],
+        }
+    else:
+        trigger = {"method": "lexical-estimate", "accuracy": round(_mean([float(x) for x in lexical_hits]), 3)}
+
+    passed = (
+        trigger["accuracy"] >= 0.8
+        and primary["skill"] > primary["baseline"]
+        and contract_summary["skill"] >= contract_summary["baseline"]
+    )
     return {
-        "verdict": "pass" if trigger_accuracy >= 0.8 and with_skill > baseline else "fail",
-        "trigger_accuracy": round(trigger_accuracy, 3),
-        "baseline_score": round(baseline, 3),
-        "skill_score": round(with_skill, 3),
-        "improvement": round(with_skill - baseline, 3),
-        "cases": positive_rows,
+        "verdict": "pass" if passed else "fail",
+        "primary_metric": "task" if has_task else "contract",
+        "trigger_accuracy": trigger["accuracy"],
+        "trigger": trigger,
+        "baseline_score": primary["baseline"],
+        "skill_score": primary["skill"],
+        "improvement": round(primary["skill"] - primary["baseline"], 3),
+        "contract": contract_summary,
+        "task": task_summary,
+        "task_metrics": {
+            name: {mode: round(_mean(values), 3) for mode, values in by_mode.items()}
+            for name, by_mode in metric_scores.items()
+        },
+        "efficiency": efficiency_summary(fixtures),
+        "cases": rows,
     }
 
 
 def benchmark_markdown(result: dict[str, Any], skill_name: str, *, mode: str = "fixture") -> str:
     evidence_note = (
-        "Live mode used raw outputs captured from one configured model endpoint; see the adjacent CAPTURE.json for model and latency evidence."
+        "Live mode: raw outputs were captured from one configured model endpoint; see the adjacent CAPTURE.json for model, latency, and token evidence."
         if mode == "live"
-        else "Fixture mode is deterministic and validates the evaluation pipeline. Replace fixtures with DGX endpoint runs before final judging."
+        else "Fixture mode is deterministic and validates the evaluation pipeline only. Replace fixtures with DGX endpoint runs before final judging."
     )
+    def pct(value: float) -> str:
+        return f"{value:.1%}"
+
     rows = [
         f"# {skill_name} benchmark",
         "",
-        "| Metric | Baseline | With skill | Delta |",
-        "| --- | ---: | ---: | ---: |",
-        f"| Contract score | {result['baseline_score']:.1%} | {result['skill_score']:.1%} | {result['improvement']:+.1%} |",
-        f"| Trigger accuracy | - | {result['trigger_accuracy']:.1%} | - |",
+        "Both conditions receive the same user request, image, and output format. The with-skill condition adds only the",
+        "skill's workflow and guardrails, so any delta below comes from the skill's procedure, not from knowing field names.",
         "",
-        f"Verdict: **{result['verdict'].upper()}**",
+        "| Dimension | Metric | Baseline | With skill | Delta |",
+        "| --- | --- | ---: | ---: | ---: |",
+    ]
+    contract = result["contract"]
+    rows.append(f"| Contract | JSON + required fields | {pct(contract['baseline'])} | {pct(contract['skill'])} | {contract['skill'] - contract['baseline']:+.1%} |")
+    if result["task"]:
+        task = result["task"]
+        rows.append(f"| Correctness | Task score vs ground truth | {pct(task['baseline'])} | {pct(task['skill'])} | {task['skill'] - task['baseline']:+.1%} |")
+        for name, values in result["task_metrics"].items():
+            rows.append(f"| Correctness | {name} | {pct(values['baseline'])} | {pct(values['skill'])} | {values['skill'] - values['baseline']:+.1%} |")
+    trigger = result["trigger"]
+    if trigger["method"] == "lexical-estimate":
+        rows.append(f"| Discoverability | Trigger accuracy (offline lexical estimate, not an agent run) | - | {pct(trigger['accuracy'])} | - |")
+    else:
+        rows.append(
+            f"| Discoverability | Trigger accuracy ({trigger['method']}, {trigger['runs']} runs) | - | {pct(trigger['accuracy'])} | - |"
+        )
+        rows.append(f"| Discoverability | False-trigger rate on negatives | - | {pct(trigger['false_positive_rate'])} | - |")
+        rows.append(f"| Discoverability | Missed-trigger rate on positives | - | {pct(trigger['false_negative_rate'])} | - |")
+    efficiency = result.get("efficiency")
+    if efficiency:
+        b, s = efficiency["baseline"], efficiency["skill"]
+        rows.append(
+            f"| Efficiency | Mean latency (s) | {b['mean_latency_seconds']:.1f} | {s['mean_latency_seconds']:.1f} | {s['mean_latency_seconds'] - b['mean_latency_seconds']:+.1f} |"
+        )
+        if b["mean_completion_tokens"] is not None and s["mean_completion_tokens"] is not None:
+            rows.append(
+                f"| Efficiency | Mean completion tokens | {b['mean_completion_tokens']:.0f} | {s['mean_completion_tokens']:.0f} | {s['mean_completion_tokens'] - b['mean_completion_tokens']:+.0f} |"
+            )
+    rows += [
+        "",
+        f"Primary metric: **{result['primary_metric']}**. Verdict: **{result['verdict'].upper()}**",
         "",
         evidence_note,
         "",

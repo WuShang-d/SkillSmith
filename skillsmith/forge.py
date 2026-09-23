@@ -11,6 +11,18 @@ def _bullets(items: list[str]) -> str:
     return "\n".join(f"- {item}" for item in items)
 
 
+def contract_instructions(contract: dict) -> list[str]:
+    """Output-format instructions shared by the baseline and the with-skill condition."""
+    lines = [f"Return only valid {contract['format']}."]
+    fields = contract.get("required_fields", [])
+    if fields:
+        lines.append("Use these exact top-level field names: " + ", ".join(fields) + ".")
+        lines.append("Include every required field even when its value is empty or uncertain.")
+    if contract.get("schema_hint"):
+        lines.append("Shape: " + contract["schema_hint"])
+    return lines
+
+
 def render_skill_md(spec: WorkflowSpec) -> str:
     d = spec.data
     triggers = "; ".join(d["triggers"])
@@ -22,6 +34,8 @@ def render_skill_md(spec: WorkflowSpec) -> str:
     )
     fields = d["output_contract"].get("required_fields", [])
     field_text = ", ".join(f"`{field}`" for field in fields) if fields else "No fixed fields."
+    hint = d["output_contract"].get("schema_hint")
+    shape = f"- Shape: `{hint}`\n" if hint else ""
     return f"""---
 name: {spec.name}
 description: {json.dumps(description, ensure_ascii=False)}
@@ -50,7 +64,7 @@ If required input is missing, ask for it instead of guessing.
 
 - Format: `{d['output_contract']['format']}`
 - Required fields: {field_text}
-- Write generated artifacts only beneath the user-selected output directory.
+{shape}- Write generated artifacts only beneath the user-selected output directory.
 - Separate visible evidence from inference and report uncertainty explicitly.
 
 ## Guardrails
@@ -111,6 +125,7 @@ def main() -> int:
         f"- Return only valid {workflow['output_contract']['format']}.",
         "- Use these exact top-level field names: " + ", ".join(required_fields) + ".",
         "- Include every required field even when its value is empty or uncertain.",
+        *(["- Shape: " + workflow["output_contract"]["schema_hint"]] if workflow["output_contract"].get("schema_hint") else []),
     ])
     prompt = "Apply the installed skill to this input image. Do not rename contract fields."
 
@@ -129,7 +144,7 @@ def main() -> int:
         payload = {
             "model": model,
             "temperature": 0,
-            "max_tokens": 1024,
+            "max_tokens": 2048,
             "chat_template_kwargs": {"enable_thinking": False},
             "messages": [
                 {"role": "system", "content": system},
@@ -197,6 +212,9 @@ def forge(spec: WorkflowSpec, output_root: str | Path, *, force: bool = False) -
     (target / "scripts/run.py").chmod(0o755)
     workflow = dict(spec.data)
     evals = workflow.pop("evals")
+    workflow.pop("scorer", None)
+    if spec.scorer_path:
+        shutil.copyfile(spec.scorer_path, target / "evals/scorer.py")
     (target / "references/workflow.json").write_text(
         json.dumps(workflow, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
