@@ -112,7 +112,7 @@ def efficiency_summary(fixtures: Path) -> dict[str, Any] | None:
         return None
     captures = json.loads(manifest_path.read_text(encoding="utf-8")).get("captures", [])
     summary: dict[str, Any] = {}
-    for mode in ("baseline", "skill"):
+    for mode in sorted({row.get("mode") for row in captures}):
         rows = [row for row in captures if row.get("mode") == mode]
         tokens = [row["completion_tokens"] for row in rows if isinstance(row.get("completion_tokens"), int)]
         summary[mode] = {
@@ -136,8 +136,13 @@ def evaluate_fixtures(
     scorer = load_scorer(skill_root)
     lexical_hits = []
     rows = []
-    contract_scores: dict[str, list[float]] = {"baseline": [], "skill": []}
-    task_scores: dict[str, list[float]] = {"baseline": [], "skill": []}
+    output_cases = [case for case in evals if is_output_case(case)]
+    # "reference" = same data pasted into a generic prompt; present when the skill ships reference files.
+    modes = ["baseline", "skill"]
+    if output_cases and all((fixtures / f"{case['id']}.reference.txt").is_file() for case in output_cases):
+        modes.append("reference")
+    contract_scores: dict[str, list[float]] = {mode: [] for mode in modes}
+    task_scores: dict[str, list[float]] = {mode: [] for mode in modes}
     metric_scores: dict[str, dict[str, list[float]]] = {}
     for case in evals:
         predicted = predicts_trigger(case["prompt"], workflow["triggers"], workflow["negative_triggers"])
@@ -145,7 +150,7 @@ def evaluate_fixtures(
         if not is_output_case(case):
             continue
         row: dict[str, Any] = {"id": case["id"]}
-        for mode in ("baseline", "skill"):
+        for mode in modes:
             text = (fixtures / f"{case['id']}.{mode}.txt").read_text(encoding="utf-8")
             value, notes = score_output(text, case, contract)
             contract_scores[mode].append(value)
@@ -157,7 +162,7 @@ def evaluate_fixtures(
                 row[f"{mode}_task"] = round(_mean(list(metrics.values())), 3)
                 row[f"{mode}_metrics"] = {name: round(v, 3) for name, v in metrics.items()}
                 for name, v in metrics.items():
-                    metric_scores.setdefault(name, {"baseline": [], "skill": []})[mode].append(v)
+                    metric_scores.setdefault(name, {m: [] for m in modes})[mode].append(v)
         rows.append(row)
 
     contract_summary = {mode: round(_mean(values), 3) for mode, values in contract_scores.items()}
@@ -180,6 +185,7 @@ def evaluate_fixtures(
         trigger["accuracy"] >= 0.8
         and primary["skill"] > primary["baseline"]
         and contract_summary["skill"] >= contract_summary["baseline"]
+        and ("reference" not in primary or primary["skill"] >= primary["reference"])
     )
     return {
         "verdict": "pass" if passed else "fail",
@@ -189,6 +195,7 @@ def evaluate_fixtures(
         "baseline_score": primary["baseline"],
         "skill_score": primary["skill"],
         "improvement": round(primary["skill"] - primary["baseline"], 3),
+        "improvement_over_reference": round(primary["skill"] - primary["reference"], 3) if "reference" in primary else None,
         "contract": contract_summary,
         "task": task_summary,
         "task_metrics": {
@@ -206,44 +213,53 @@ def benchmark_markdown(result: dict[str, Any], skill_name: str, *, mode: str = "
         if mode == "live"
         else "Fixture mode is deterministic and validates the evaluation pipeline only. Replace fixtures with DGX endpoint runs before final judging."
     )
+    has_reference = "reference" in result["contract"]
+    columns = ["baseline", "reference", "skill"] if has_reference else ["baseline", "skill"]
+
     def pct(value: float) -> str:
         return f"{value:.1%}"
 
+    def row(dimension: str, metric: str, values: dict[str, float] | None, fmt=pct, delta=lambda d: f"{d:+.1%}") -> str:
+        if values is None:
+            cells = ["-"] * (len(columns) - 1)
+            return f"| {dimension} | {metric} | " + " | ".join(cells) + " | - |"
+        cells = [fmt(values[c]) for c in columns]
+        return f"| {dimension} | {metric} | " + " | ".join(cells) + f" | {delta(values['skill'] - values['baseline'])} |"
+
+    header = ["Baseline", "Pasted data", "With skill"] if has_reference else ["Baseline", "With skill"]
     rows = [
         f"# {skill_name} benchmark",
         "",
-        "Both conditions receive the same user request, image, and output format. The with-skill condition adds only the",
-        "skill's workflow and guardrails, so any delta below comes from the skill's procedure, not from knowing field names.",
-        "",
-        "| Dimension | Metric | Baseline | With skill | Delta |",
-        "| --- | --- | ---: | ---: | ---: |",
+        "All conditions receive the same user request, image, and output format. The with-skill condition adds the",
+        "skill's workflow and guardrails, so any delta below comes from the skill, not from knowing field names.",
     ]
-    contract = result["contract"]
-    rows.append(f"| Contract | JSON + required fields | {pct(contract['baseline'])} | {pct(contract['skill'])} | {contract['skill'] - contract['baseline']:+.1%} |")
+    if has_reference:
+        rows.append("*Pasted data* is the same reference data given to a generic prompt without the skill's procedure.")
+    rows += [
+        "",
+        "| Dimension | Metric | " + " | ".join(header) + " | Delta vs baseline |",
+        "| --- | --- | " + " | ".join("---:" for _ in header) + " | ---: |",
+        row("Contract", "JSON + required fields", result["contract"]),
+    ]
     if result["task"]:
-        task = result["task"]
-        rows.append(f"| Correctness | Task score vs ground truth | {pct(task['baseline'])} | {pct(task['skill'])} | {task['skill'] - task['baseline']:+.1%} |")
+        rows.append(row("Correctness", "Task score vs ground truth", result["task"]))
         for name, values in result["task_metrics"].items():
-            rows.append(f"| Correctness | {name} | {pct(values['baseline'])} | {pct(values['skill'])} | {values['skill'] - values['baseline']:+.1%} |")
+            rows.append(row("Correctness", name, values))
     trigger = result["trigger"]
+    blank = " | ".join("-" for _ in columns[:-1])
     if trigger["method"] == "lexical-estimate":
-        rows.append(f"| Discoverability | Trigger accuracy (offline lexical estimate, not an agent run) | - | {pct(trigger['accuracy'])} | - |")
+        rows.append(f"| Discoverability | Trigger accuracy (offline lexical estimate, not an agent run) | {blank} | {pct(trigger['accuracy'])} | - |")
     else:
-        rows.append(
-            f"| Discoverability | Trigger accuracy ({trigger['method']}, {trigger['runs']} runs) | - | {pct(trigger['accuracy'])} | - |"
-        )
-        rows.append(f"| Discoverability | False-trigger rate on negatives | - | {pct(trigger['false_positive_rate'])} | - |")
-        rows.append(f"| Discoverability | Missed-trigger rate on positives | - | {pct(trigger['false_negative_rate'])} | - |")
+        rows.append(f"| Discoverability | Trigger accuracy ({trigger['method']}, {trigger['runs']} runs) | {blank} | {pct(trigger['accuracy'])} | - |")
+        rows.append(f"| Discoverability | False-trigger rate on negatives | {blank} | {pct(trigger['false_positive_rate'])} | - |")
+        rows.append(f"| Discoverability | Missed-trigger rate on positives | {blank} | {pct(trigger['false_negative_rate'])} | - |")
     efficiency = result.get("efficiency")
-    if efficiency:
-        b, s = efficiency["baseline"], efficiency["skill"]
-        rows.append(
-            f"| Efficiency | Mean latency (s) | {b['mean_latency_seconds']:.1f} | {s['mean_latency_seconds']:.1f} | {s['mean_latency_seconds'] - b['mean_latency_seconds']:+.1f} |"
-        )
-        if b["mean_completion_tokens"] is not None and s["mean_completion_tokens"] is not None:
-            rows.append(
-                f"| Efficiency | Mean completion tokens | {b['mean_completion_tokens']:.0f} | {s['mean_completion_tokens']:.0f} | {s['mean_completion_tokens'] - b['mean_completion_tokens']:+.0f} |"
-            )
+    if efficiency and all(c in efficiency for c in columns):
+        latency = {c: efficiency[c]["mean_latency_seconds"] for c in columns}
+        rows.append(row("Efficiency", "Mean latency (s)", latency, fmt=lambda v: f"{v:.1f}", delta=lambda d: f"{d:+.1f}"))
+        if all(efficiency[c]["mean_completion_tokens"] is not None for c in columns):
+            tokens = {c: efficiency[c]["mean_completion_tokens"] for c in columns}
+            rows.append(row("Efficiency", "Mean completion tokens", tokens, fmt=lambda v: f"{v:.0f}", delta=lambda d: f"{d:+.0f}"))
     rows += [
         "",
         f"Primary metric: **{result['primary_metric']}**. Verdict: **{result['verdict'].upper()}**",

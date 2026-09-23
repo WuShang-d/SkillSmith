@@ -25,7 +25,10 @@ Optional fields that make the A/B evaluation meaningful:
 | `output_contract.schema_hint` | string | Output shape given to **both** conditions, so the baseline is not penalised for not knowing field names |
 | `scorer` | string | Relative path to a Python file defining `score(output, ground_truth) -> {metric: float in [0, 1]}`; copied into the skill as `evals/scorer.py` and security-scanned before it runs |
 | `evals[].ground_truth` | object | Annotated answer for a positive case, passed to the scorer; requires `scorer` |
+| `references` | string[] | Relative paths to data files the skill ships (e.g. a planogram, a code table); copied into the skill's `references/` and given to the with-skill condition |
 | `evals[].kind` | `"output"` or `"trigger"` | `trigger` cases only test skill selection and need no fixture or image; default `output` |
+
+When `references` are present, live capture adds a third condition, **pasted data**: a generic prompt with the same output format and the same reference files but none of the skill's workflow or guardrails. The gate then also requires the skill to score at least as well as pasting the data, so a skill is not credited for knowledge the user could simply paste.
 
 When ground truth exists, the release gate uses the task score (correctness against ground truth), not contract adherence. Add many `trigger` cases, including near-miss negatives, because `trigger-eval` samples each one several times through an agent router or a real OpenClaw agent.
 

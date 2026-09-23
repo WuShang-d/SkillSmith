@@ -1,0 +1,577 @@
+{
+  "method": "openclaw",
+  "harness": "OpenClaw 2026.9.5 (ec9c1a1)",
+  "profile": "skillsmith-eval",
+  "neighbours": [
+    "retail-shelf-audit"
+  ],
+  "repeats": 3,
+  "runs": 36,
+  "accuracy": 0.972,
+  "false_negative_rate": 0.042,
+  "false_positive_rate": 0.0,
+  "per_case": {
+    "within-tolerance": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "tea-oos-water-misplaced": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "cola-low-chips-oos": {
+      "should_trigger": true,
+      "triggered": 2,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance",
+        "retail-shelf-audit"
+      ]
+    },
+    "mixed-deviations": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "fully-compliant": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "cola-oos-tea-low": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "trigger-replenish-priority": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "trigger-planogram-en": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "negative-count-only": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    },
+    "negative-replenish-db": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    },
+    "negative-poster": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    },
+    "negative-face": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    }
+  },
+  "details": [
+    {
+      "case_id": "within-tolerance",
+      "attempt": 1,
+      "session_id": "skillsmith-within-tolerance-1-dfc11780",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 218.871
+    },
+    {
+      "case_id": "within-tolerance",
+      "attempt": 2,
+      "session_id": "skillsmith-within-tolerance-2-e723fa2c",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 111.915
+    },
+    {
+      "case_id": "within-tolerance",
+      "attempt": 3,
+      "session_id": "skillsmith-within-tolerance-3-14a8db0e",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 162.845
+    },
+    {
+      "case_id": "tea-oos-water-misplaced",
+      "attempt": 1,
+      "session_id": "skillsmith-tea-oos-water-misplaced-1-9d419700",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 125.543
+    },
+    {
+      "case_id": "tea-oos-water-misplaced",
+      "attempt": 2,
+      "session_id": "skillsmith-tea-oos-water-misplaced-2-19f3c73f",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 125.645
+    },
+    {
+      "case_id": "tea-oos-water-misplaced",
+      "attempt": 3,
+      "session_id": "skillsmith-tea-oos-water-misplaced-3-283ddd79",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "skill_workshop:/skills/planogram-compliance/SKILL.md",
+        "skill_workshop:/skills/retail-shelf-audit/SKILL.md",
+        "/root/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md",
+        "/root/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md",
+        "/home/Developer/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md",
+        "/home/Developer/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 145.876
+    },
+    {
+      "case_id": "cola-low-chips-oos",
+      "attempt": 1,
+      "session_id": "skillsmith-cola-low-chips-oos-1-7ea5199c",
+      "should_trigger": true,
+      "triggered": false,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "skill_workshop:/skills/retail-shelf-audit/SKILL.md",
+        "/home/Developer/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md",
+        "/home/Developer/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 122.163
+    },
+    {
+      "case_id": "cola-low-chips-oos",
+      "attempt": 2,
+      "session_id": "skillsmith-cola-low-chips-oos-2-b08a6c45",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 257.472
+    },
+    {
+      "case_id": "cola-low-chips-oos",
+      "attempt": 3,
+      "session_id": "skillsmith-cola-low-chips-oos-3-a492ae9c",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "skill_workshop:/skills/planogram-compliance/SKILL.md",
+        "/home/Developer/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 191.847
+    },
+    {
+      "case_id": "mixed-deviations",
+      "attempt": 1,
+      "session_id": "skillsmith-mixed-deviations-1-3dbf09c0",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "skill_workshop:/skills/planogram-compliance/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 172.757
+    },
+    {
+      "case_id": "mixed-deviations",
+      "attempt": 2,
+      "session_id": "skillsmith-mixed-deviations-2-203c2c12",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 89.269
+    },
+    {
+      "case_id": "mixed-deviations",
+      "attempt": 3,
+      "session_id": "skillsmith-mixed-deviations-3-b937c513",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 75.928
+    },
+    {
+      "case_id": "fully-compliant",
+      "attempt": 1,
+      "session_id": "skillsmith-fully-compliant-1-52529f2d",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 99.247
+    },
+    {
+      "case_id": "fully-compliant",
+      "attempt": 2,
+      "session_id": "skillsmith-fully-compliant-2-53cb0fda",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "skill_workshop:/skills/planogram-compliance/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 75.133
+    },
+    {
+      "case_id": "fully-compliant",
+      "attempt": 3,
+      "session_id": "skillsmith-fully-compliant-3-e381d526",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "skill_workshop:/skills/planogram-compliance/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 63.108
+    },
+    {
+      "case_id": "cola-oos-tea-low",
+      "attempt": 1,
+      "session_id": "skillsmith-cola-oos-tea-low-1-d15d1e4e",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "skill_workshop:/skills/planogram-compliance/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 161.571
+    },
+    {
+      "case_id": "cola-oos-tea-low",
+      "attempt": 2,
+      "session_id": "skillsmith-cola-oos-tea-low-2-027ba42e",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "skill_workshop:/skills/planogram-compliance/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 116.543
+    },
+    {
+      "case_id": "cola-oos-tea-low",
+      "attempt": 3,
+      "session_id": "skillsmith-cola-oos-tea-low-3-415a69a6",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 127.783
+    },
+    {
+      "case_id": "trigger-replenish-priority",
+      "attempt": 1,
+      "session_id": "skillsmith-trigger-replenish-priority-1-1f995b00",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "skill_workshop:/skills/planogram-compliance/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md",
+        "skill_workshop:/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 56.746
+    },
+    {
+      "case_id": "trigger-replenish-priority",
+      "attempt": 2,
+      "session_id": "skillsmith-trigger-replenish-priority-2-4b6e2012",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md",
+        "~/.openclaw-skillsmith-eval/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 45.959
+    },
+    {
+      "case_id": "trigger-replenish-priority",
+      "attempt": 3,
+      "session_id": "skillsmith-trigger-replenish-priority-3-bede5fd7",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 93.197
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 1,
+      "session_id": "skillsmith-trigger-planogram-en-1-dce7eca3",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 33.669
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 2,
+      "session_id": "skillsmith-trigger-planogram-en-2-e1614140",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "~/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 31.787
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 3,
+      "session_id": "skillsmith-trigger-planogram-en-3-6e9635fe",
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "skill_workshop:/skills/planogram-compliance/SKILL.md",
+        "/home/Developer/.openclaw-skillsmith-eval/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 38.972
+    },
+    {
+      "case_id": "negative-count-only",
+      "attempt": 1,
+      "session_id": "skillsmith-negative-count-only-1-0f1fc8c2",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 18.117
+    },
+    {
+      "case_id": "negative-count-only",
+      "attempt": 2,
+      "session_id": "skillsmith-negative-count-only-2-b84b61e2",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 21.025
+    },
+    {
+      "case_id": "negative-count-only",
+      "attempt": 3,
+      "session_id": "skillsmith-negative-count-only-3-12c6ee7e",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 17.349
+    },
+    {
+      "case_id": "negative-replenish-db",
+      "attempt": 1,
+      "session_id": "skillsmith-negative-replenish-db-1-6f29a6dd",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 1,
+      "elapsed_seconds": 243.105
+    },
+    {
+      "case_id": "negative-replenish-db",
+      "attempt": 2,
+      "session_id": "skillsmith-negative-replenish-db-2-6f8bf965",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 145.766
+    },
+    {
+      "case_id": "negative-replenish-db",
+      "attempt": 3,
+      "session_id": "skillsmith-negative-replenish-db-3-96f6501f",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 213.477
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 1,
+      "session_id": "skillsmith-negative-poster-1-c96d37ad",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 46.398
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 2,
+      "session_id": "skillsmith-negative-poster-2-544531d8",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 26.214
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 3,
+      "session_id": "skillsmith-negative-poster-3-a29abc9b",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 20.107
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 1,
+      "session_id": "skillsmith-negative-face-1-c61e520e",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 10.053
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 2,
+      "session_id": "skillsmith-negative-face-2-f61c3680",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 10.406
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 3,
+      "session_id": "skillsmith-negative-face-3-8e2bbd7d",
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "exit_code": 0,
+      "elapsed_seconds": 20.654
+    }
+  ]
+}

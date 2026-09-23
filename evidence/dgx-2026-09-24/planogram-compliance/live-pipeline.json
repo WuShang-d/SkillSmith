@@ -1,0 +1,378 @@
+{
+  "status": "ok",
+  "generated": "/home/Developer/skillsmith/build/plan/generated/planogram-compliance",
+  "security": "pass",
+  "capture": {
+    "mode": "live",
+    "endpoint": "http://127.0.0.1:8000/v1",
+    "model": "Qwen/Qwen3.6-35B-A3B",
+    "captures": [
+      {
+        "case_id": "within-tolerance",
+        "mode": "baseline",
+        "elapsed_seconds": 17.371,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/within-tolerance.baseline.txt",
+        "prompt_tokens": 1707,
+        "completion_tokens": 521
+      },
+      {
+        "case_id": "within-tolerance",
+        "mode": "skill",
+        "elapsed_seconds": 17.499,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/within-tolerance.skill.txt",
+        "prompt_tokens": 4096,
+        "completion_tokens": 517
+      },
+      {
+        "case_id": "within-tolerance",
+        "mode": "reference",
+        "elapsed_seconds": 35.049,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/within-tolerance.reference.txt",
+        "prompt_tokens": 2335,
+        "completion_tokens": 1082
+      },
+      {
+        "case_id": "tea-oos-water-misplaced",
+        "mode": "baseline",
+        "elapsed_seconds": 22.099,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/tea-oos-water-misplaced.baseline.txt",
+        "prompt_tokens": 1709,
+        "completion_tokens": 669
+      },
+      {
+        "case_id": "tea-oos-water-misplaced",
+        "mode": "skill",
+        "elapsed_seconds": 19.324,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/tea-oos-water-misplaced.skill.txt",
+        "prompt_tokens": 4098,
+        "completion_tokens": 573
+      },
+      {
+        "case_id": "tea-oos-water-misplaced",
+        "mode": "reference",
+        "elapsed_seconds": 22.296,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/tea-oos-water-misplaced.reference.txt",
+        "prompt_tokens": 2337,
+        "completion_tokens": 678
+      },
+      {
+        "case_id": "cola-low-chips-oos",
+        "mode": "baseline",
+        "elapsed_seconds": 17.547,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/cola-low-chips-oos.baseline.txt",
+        "prompt_tokens": 1708,
+        "completion_tokens": 524
+      },
+      {
+        "case_id": "cola-low-chips-oos",
+        "mode": "skill",
+        "elapsed_seconds": 17.492,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/cola-low-chips-oos.skill.txt",
+        "prompt_tokens": 4097,
+        "completion_tokens": 514
+      },
+      {
+        "case_id": "cola-low-chips-oos",
+        "mode": "reference",
+        "elapsed_seconds": 19.356,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/cola-low-chips-oos.reference.txt",
+        "prompt_tokens": 2336,
+        "completion_tokens": 583
+      },
+      {
+        "case_id": "mixed-deviations",
+        "mode": "baseline",
+        "elapsed_seconds": 20.491,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/mixed-deviations.baseline.txt",
+        "prompt_tokens": 1702,
+        "completion_tokens": 616
+      },
+      {
+        "case_id": "mixed-deviations",
+        "mode": "skill",
+        "elapsed_seconds": 19.234,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/mixed-deviations.skill.txt",
+        "prompt_tokens": 4091,
+        "completion_tokens": 568
+      },
+      {
+        "case_id": "mixed-deviations",
+        "mode": "reference",
+        "elapsed_seconds": 26.268,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/mixed-deviations.reference.txt",
+        "prompt_tokens": 2330,
+        "completion_tokens": 800
+      },
+      {
+        "case_id": "fully-compliant",
+        "mode": "baseline",
+        "elapsed_seconds": 17.315,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/fully-compliant.baseline.txt",
+        "prompt_tokens": 1698,
+        "completion_tokens": 515
+      },
+      {
+        "case_id": "fully-compliant",
+        "mode": "skill",
+        "elapsed_seconds": 17.648,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/fully-compliant.skill.txt",
+        "prompt_tokens": 4087,
+        "completion_tokens": 517
+      },
+      {
+        "case_id": "fully-compliant",
+        "mode": "reference",
+        "elapsed_seconds": 23.072,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/fully-compliant.reference.txt",
+        "prompt_tokens": 2326,
+        "completion_tokens": 697
+      },
+      {
+        "case_id": "cola-oos-tea-low",
+        "mode": "baseline",
+        "elapsed_seconds": 16.938,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/cola-oos-tea-low.baseline.txt",
+        "prompt_tokens": 1704,
+        "completion_tokens": 501
+      },
+      {
+        "case_id": "cola-oos-tea-low",
+        "mode": "skill",
+        "elapsed_seconds": 19.69,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/cola-oos-tea-low.skill.txt",
+        "prompt_tokens": 4093,
+        "completion_tokens": 578
+      },
+      {
+        "case_id": "cola-oos-tea-low",
+        "mode": "reference",
+        "elapsed_seconds": 21.481,
+        "output_path": "/home/Developer/skillsmith/build/plan/live-fixtures/cola-oos-tea-low.reference.txt",
+        "prompt_tokens": 2332,
+        "completion_tokens": 646
+      }
+    ]
+  },
+  "evaluation": {
+    "verdict": "pass",
+    "primary_metric": "task",
+    "trigger_accuracy": 1.0,
+    "trigger": {
+      "method": "agent-router",
+      "accuracy": 1.0,
+      "runs": 60,
+      "false_positive_rate": 0.0,
+      "false_negative_rate": 0.0
+    },
+    "baseline_score": 0.111,
+    "skill_score": 0.814,
+    "improvement": 0.703,
+    "improvement_over_reference": 0.088,
+    "contract": {
+      "baseline": 1.0,
+      "skill": 1.0,
+      "reference": 1.0
+    },
+    "task": {
+      "baseline": 0.111,
+      "skill": 0.814,
+      "reference": 0.726
+    },
+    "task_metrics": {
+      "status_accuracy": {
+        "baseline": 0.0,
+        "skill": 0.905,
+        "reference": 0.774
+      },
+      "deviation_f1": {
+        "baseline": 0.333,
+        "skill": 0.587,
+        "reference": 0.469
+      },
+      "facing_exact": {
+        "baseline": 0.0,
+        "skill": 0.95,
+        "reference": 0.935
+      }
+    },
+    "efficiency": {
+      "baseline": {
+        "mean_latency_seconds": 18.627,
+        "mean_completion_tokens": 557.7
+      },
+      "reference": {
+        "mean_latency_seconds": 24.587,
+        "mean_completion_tokens": 747.7
+      },
+      "skill": {
+        "mean_latency_seconds": 18.481,
+        "mean_completion_tokens": 544.5
+      }
+    },
+    "cases": [
+      {
+        "id": "within-tolerance",
+        "baseline_contract": 1.0,
+        "baseline_notes": [],
+        "baseline_task": 0.333,
+        "baseline_metrics": {
+          "status_accuracy": 0.0,
+          "deviation_f1": 1.0,
+          "facing_exact": 0.0
+        },
+        "skill_contract": 1.0,
+        "skill_notes": [],
+        "skill_task": 0.6,
+        "skill_metrics": {
+          "status_accuracy": 0.8,
+          "deviation_f1": 0.0,
+          "facing_exact": 1.0
+        },
+        "reference_contract": 1.0,
+        "reference_notes": [],
+        "reference_task": 0.5,
+        "reference_metrics": {
+          "status_accuracy": 0.5,
+          "deviation_f1": 0.0,
+          "facing_exact": 1.0
+        }
+      },
+      {
+        "id": "tea-oos-water-misplaced",
+        "baseline_contract": 1.0,
+        "baseline_notes": [],
+        "baseline_task": 0.0,
+        "baseline_metrics": {
+          "status_accuracy": 0.0,
+          "deviation_f1": 0.0,
+          "facing_exact": 0.0
+        },
+        "skill_contract": 1.0,
+        "skill_notes": [],
+        "skill_task": 0.828,
+        "skill_metrics": {
+          "status_accuracy": 0.818,
+          "deviation_f1": 0.667,
+          "facing_exact": 1.0
+        },
+        "reference_contract": 1.0,
+        "reference_notes": [],
+        "reference_task": 0.679,
+        "reference_metrics": {
+          "status_accuracy": 0.727,
+          "deviation_f1": 0.4,
+          "facing_exact": 0.909
+        }
+      },
+      {
+        "id": "cola-low-chips-oos",
+        "baseline_contract": 1.0,
+        "baseline_notes": [],
+        "baseline_task": 0.0,
+        "baseline_metrics": {
+          "status_accuracy": 0.0,
+          "deviation_f1": 0.0,
+          "facing_exact": 0.0
+        },
+        "skill_contract": 1.0,
+        "skill_notes": [],
+        "skill_task": 1.0,
+        "skill_metrics": {
+          "status_accuracy": 1.0,
+          "deviation_f1": 1.0,
+          "facing_exact": 1.0
+        },
+        "reference_contract": 1.0,
+        "reference_notes": [],
+        "reference_task": 1.0,
+        "reference_metrics": {
+          "status_accuracy": 1.0,
+          "deviation_f1": 1.0,
+          "facing_exact": 1.0
+        }
+      },
+      {
+        "id": "mixed-deviations",
+        "baseline_contract": 1.0,
+        "baseline_notes": [],
+        "baseline_task": 0.0,
+        "baseline_metrics": {
+          "status_accuracy": 0.0,
+          "deviation_f1": 0.0,
+          "facing_exact": 0.0
+        },
+        "skill_contract": 1.0,
+        "skill_notes": [],
+        "skill_task": 0.922,
+        "skill_metrics": {
+          "status_accuracy": 0.909,
+          "deviation_f1": 0.857,
+          "facing_exact": 1.0
+        },
+        "reference_contract": 1.0,
+        "reference_notes": [],
+        "reference_task": 0.856,
+        "reference_metrics": {
+          "status_accuracy": 0.818,
+          "deviation_f1": 0.75,
+          "facing_exact": 1.0
+        }
+      },
+      {
+        "id": "fully-compliant",
+        "baseline_contract": 1.0,
+        "baseline_notes": [],
+        "baseline_task": 0.333,
+        "baseline_metrics": {
+          "status_accuracy": 0.0,
+          "deviation_f1": 1.0,
+          "facing_exact": 0.0
+        },
+        "skill_contract": 1.0,
+        "skill_notes": [],
+        "skill_task": 0.6,
+        "skill_metrics": {
+          "status_accuracy": 0.9,
+          "deviation_f1": 0.0,
+          "facing_exact": 0.9
+        },
+        "reference_contract": 1.0,
+        "reference_notes": [],
+        "reference_task": 0.567,
+        "reference_metrics": {
+          "status_accuracy": 0.8,
+          "deviation_f1": 0.0,
+          "facing_exact": 0.9
+        }
+      },
+      {
+        "id": "cola-oos-tea-low",
+        "baseline_contract": 1.0,
+        "baseline_notes": [],
+        "baseline_task": 0.0,
+        "baseline_metrics": {
+          "status_accuracy": 0.0,
+          "deviation_f1": 0.0,
+          "facing_exact": 0.0
+        },
+        "skill_contract": 1.0,
+        "skill_notes": [],
+        "skill_task": 0.933,
+        "skill_metrics": {
+          "status_accuracy": 1.0,
+          "deviation_f1": 1.0,
+          "facing_exact": 0.8
+        },
+        "reference_contract": 1.0,
+        "reference_notes": [],
+        "reference_task": 0.756,
+        "reference_metrics": {
+          "status_accuracy": 0.8,
+          "deviation_f1": 0.667,
+          "facing_exact": 0.8
+        }
+      }
+    ]
+  },
+  "installed": "/home/Developer/skillsmith/build/plan/workspace/skills/planogram-compliance"
+}

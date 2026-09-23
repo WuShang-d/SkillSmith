@@ -11,7 +11,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from .forge import contract_instructions
+from .forge import contract_instructions, reference_block
 from .spec import is_output_case
 
 
@@ -117,6 +117,11 @@ def baseline_system(contract: dict[str, Any]) -> str:
     return "\n".join([BASELINE_SYSTEM, "Output format:", *(f"- {line}" for line in contract_instructions(contract))])
 
 
+def reference_system(contract: dict[str, Any], references: str) -> str:
+    """What a user does without the skill: paste the same reference data into the prompt."""
+    return baseline_system(contract) + "\n\nReference data provided by the user:\n\n" + references
+
+
 def _input_path(input_root: Path, relative: str) -> Path:
     candidate = (input_root / relative).resolve()
     try:
@@ -151,6 +156,7 @@ def capture_ab(
     skill_md = (root / "SKILL.md").read_text(encoding="utf-8")
     workflow = (root / "references/workflow.json").read_text(encoding="utf-8")
     contract = json.loads(workflow)["output_contract"]
+    references = reference_block(root, json.loads(workflow).get("references", []))
     captures: list[Capture] = []
 
     for case in evals:
@@ -167,8 +173,11 @@ def capture_ab(
                 + skill_md
                 + "\n\nValidated workflow reference:\n"
                 + workflow
+                + (f"\n\nSkill reference files:\n\n{references}" if references else "")
             ),
         }
+        if references:
+            conditions["reference"] = reference_system(contract, references)
         for mode, system in conditions.items():
             text, elapsed, usage = chat_completion(
                 base_url=endpoint,

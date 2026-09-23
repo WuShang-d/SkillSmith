@@ -1,0 +1,65 @@
+```json
+{
+  "bay_id": "A12",
+  "items": [
+    {
+      "shelf": 1,
+      "sku_code": "RED-CAN",
+      "observed_facings": 3,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "WTR-BTL",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "GRN-JUICE",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "YEL-CHIPS",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "RED-CAN",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "GRN-JUICE",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "GRN-JUICE",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "WTR-BTL",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "RED-CAN",
+      "observed_facings": 3,
+      "status": "OK"
+    }
+  ],
+  "uncertainties": [
+    "The planogram is not provided, so the expected number of facings for each SKU is unknown. The 'OK' status is based on the assumption that the visible facings are correct.",
+    "The specific SKU codes (e.g., 'RED-CAN', 'WTR-BTL') are assigned based on visual appearance and are not verified against a product database."
+  ]
+}
+```

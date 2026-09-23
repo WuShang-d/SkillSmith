@@ -1,0 +1,64 @@
+```json
+{
+  "bay_id": "A12",
+  "items": [
+    {
+      "shelf": 1,
+      "sku_code": "RED-CAN",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "WTR-BTL",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "GRN-BX",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "YEL-PCK",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "GRN-BX",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "GRN-BX",
+      "observed_facings": 3,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "WTR-BTL",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "YEL-PCK",
+      "observed_facings": 2,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "RED-CAN",
+      "observed_facings": 3,
+      "status": "OK"
+    }
+  ],
+  "uncertainties": [
+    "The provided image is a photograph of a shelf, but no reference planogram or 'display map' was provided for comparison. Therefore, a true compliance check against a specific layout plan is not possible. The status is based on visual inspection of neatness and stock levels only."
+  ]
+}
+```

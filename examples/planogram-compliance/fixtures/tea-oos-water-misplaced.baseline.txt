@@ -1,0 +1,79 @@
+```json
+{
+  "bay_id": "A12",
+  "items": [
+    {
+      "shelf": 1,
+      "sku_code": "RED-CAN",
+      "observed_facings": 14,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "WTR-BTL",
+      "observed_facings": 8,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "GRN-BX",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "YEL-PCK",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "RED-CAN",
+      "observed_facings": 10,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "WTR-BTL",
+      "observed_facings": 3,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "GRN-BX",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "WTR-BTL",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "YEL-PCK",
+      "observed_facings": 2,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "RED-CAN",
+      "observed_facings": 6,
+      "status": "OK"
+    }
+  ],
+  "uncertainties": [
+    "无法确定标准陈列面数，因此无法准确判断缺货情况。",
+    "无法确定标准陈列面数，因此无法准确判断缺货情况。",
+    "无法确定标准陈列面数，因此无法准确判断缺货情况。",
+    "无法确定标准陈列面数，因此无法准确判断缺货情况。",
+    "无法确定标准陈列面数，因此无法准确判断缺货情况。",
+    "无法确定标准陈列面数，因此无法准确判断缺货情况。",
+    "无法确定标准陈列面数，因此无法准确判断缺货情况。",
+    "无法确定标准陈列面数，因此无法准确判断缺货情况。",
+    "无法确定标准陈列面数，因此无法准确判断缺货情况。",
+    "无法确定标准陈列面数，因此无法准确判断缺货情况。"
+  ]
+}
+```

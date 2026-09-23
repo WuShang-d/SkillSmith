@@ -1,0 +1,70 @@
+```json
+{
+  "bay_id": "A12",
+  "items": [
+    {
+      "shelf": 1,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 3,
+      "status": "LOW"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "WAT-550",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "TEA-250",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "CHP-070",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "TEA-250",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "TEA-250",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "WAT-550",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "CHP-070",
+      "observed_facings": 0,
+      "status": "OOS"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 3,
+      "status": "OK"
+    }
+  ],
+  "uncertainties": [
+    "The planogram for shelf 3 is significantly violated. The required 'CHP-070' (chips) is completely out of stock, and the 'BEV-COLA-330' (cola) is in the wrong position, appearing on the far right instead of the far left."
+  ]
+}
+```

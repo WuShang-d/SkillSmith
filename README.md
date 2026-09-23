@@ -87,7 +87,8 @@ Images are restricted to the declared input root. Endpoints are restricted to lo
 
 - `skillsmith/`: forge, scan, evaluation, install, and CLI implementation.
 - `skills-src/skillsmith/`: the reusable meta-skill that teaches an agent to run the pipeline.
-- `examples/retail-shelf-audit/`: a complete multimodal example with positive and negative evaluations.
+- `examples/retail-shelf-audit/`: a skill that is safe and discoverable but does not beat the bare model — the gate blocks it.
+- `examples/planogram-compliance/`: a skill that ships a store planogram, SKU master and policy; scenes are composed by `make_scenes.py` with exact ground truth.
 - `tests/`: deterministic release-gate tests.
 - `scripts/verify.sh`: full local verification; `scripts/start-vllm-dgx.sh` and
   `scripts/wait-vllm-dgx.sh`: reproducible DGX model service; `scripts/demo-dgx.sh`:
@@ -106,18 +107,21 @@ python3 -m skillsmith.cli trigger-eval GENERATED/retail-shelf-audit --output bui
   --harness openclaw --input-root examples/retail-shelf-audit                                        # full OpenClaw agent turns
 ```
 
-## Verified DGX result (2026-09-23)
+## Verified DGX results: one skill blocked, one shipped
 
-Fair A/B on the competition DGX Spark: both conditions get the same image,
-request and output format; outputs are scored against annotated ground truth.
+Fair A/B on the competition DGX Spark (Qwen3.6-35B-A3B): all conditions get
+the same image, request and output format; outputs are scored against exact
+ground truth. Skills that ship reference data are also compared with simply
+pasting that data into a generic prompt.
 
-| | Baseline | With skill |
-| --- | ---: | ---: |
-| Task score vs ground truth | 82.7% | 82.3% |
-| OpenClaw trigger accuracy (36 agent runs) | – | 100% |
+| Skill | Baseline | Pasted data | With skill | Triggering | Gate |
+| --- | ---: | ---: | ---: | --- | --- |
+| `retail-shelf-audit` | 82.7% | – | 82.3% | OpenClaw 36/36 | **BLOCKED** |
+| `planogram-compliance` | 11.1% | 72.6% | 81.4% | OpenClaw 35/36 | **PASS → installed** |
 
-The gate **blocked** installation: the retail skill is discoverable and safe,
-but Qwen3.6 audits these two images equally well without it. Details, raw
-outputs and OpenClaw transcripts: `evidence/dgx-2026-09-23/`. The earlier
-"23.6% → 100%" figure (`evidence/dgx-2026-09-20/`) is superseded: that baseline
-was never told the output format.
+On a held-out photo the installed planogram skill found all three real
+deviations with one false LOW (task score 88.6%). `./scripts/demo-dgx.sh` runs
+the whole blocked → shipped → replay flow. Evidence: `evidence/dgx-2026-09-23/`
+(retail) and `evidence/dgx-2026-09-24/` (planogram). The earlier
+"23.6% → 100%" figure (`evidence/dgx-2026-09-20/`) is superseded: that
+baseline was never told the output format.

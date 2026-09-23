@@ -23,8 +23,24 @@ def contract_instructions(contract: dict) -> list[str]:
     return lines
 
 
+def reference_block(skill_root: Path, names: list[str]) -> str:
+    """Reference files as an agent would see them after reading them."""
+    return "\n\n".join(
+        f"references/{name}:\n" + (skill_root / "references" / name).read_text(encoding="utf-8")
+        for name in names
+    )
+
+
 def render_skill_md(spec: WorkflowSpec) -> str:
     d = spec.data
+    reference_names = [path.name for path in spec.reference_paths]
+    reference_section = (
+        "\n## Reference data\n\nRead these before judging the input; they are the only source of codes, targets and policy data.\n\n"
+        + "\n".join(f"- [references/{name}](references/{name})" for name in reference_names)
+        + "\n"
+        if reference_names
+        else ""
+    )
     triggers = "; ".join(d["triggers"])
     negatives = "; ".join(d["negative_triggers"])
     description = f"{d['description']} Use when: {triggers}. Do not use for: {negatives}."
@@ -45,7 +61,7 @@ license: {d.get('license', 'Apache-2.0')}
 # {d.get('display_name', spec.name)}
 
 Reproduce the validated workflow summarized in [references/workflow.json](references/workflow.json).
-
+{reference_section}
 ## Trigger boundary
 
 Use this skill when:
@@ -113,8 +129,13 @@ def main() -> int:
         raise SystemExit(f"input does not exist: {source}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    workflow = json.loads((Path(__file__).parents[1] / "references/workflow.json").read_text())
+    skill_root = Path(__file__).parents[1]
+    workflow = json.loads((skill_root / "references/workflow.json").read_text())
     required_fields = workflow["output_contract"].get("required_fields", [])
+    references = [
+        f"references/{name}:\n" + (skill_root / "references" / name).read_text(encoding="utf-8")
+        for name in workflow.get("references", [])
+    ]
     system = "\n".join([
         "Execute the installed Agent Skill exactly as specified.",
         "Workflow:",
@@ -126,6 +147,7 @@ def main() -> int:
         "- Use these exact top-level field names: " + ", ".join(required_fields) + ".",
         "- Include every required field even when its value is empty or uncertain.",
         *(["- Shape: " + workflow["output_contract"]["schema_hint"]] if workflow["output_contract"].get("schema_hint") else []),
+        *(["Reference data:", *references] if references else []),
     ])
     prompt = "Apply the installed skill to this input image. Do not rename contract fields."
 
@@ -213,6 +235,9 @@ def forge(spec: WorkflowSpec, output_root: str | Path, *, force: bool = False) -
     workflow = dict(spec.data)
     evals = workflow.pop("evals")
     workflow.pop("scorer", None)
+    workflow["references"] = [path.name for path in spec.reference_paths]
+    for path in spec.reference_paths:
+        shutil.copyfile(path, target / "references" / path.name)
     if spec.scorer_path:
         shutil.copyfile(spec.scorer_path, target / "evals/scorer.py")
     (target / "references/workflow.json").write_text(

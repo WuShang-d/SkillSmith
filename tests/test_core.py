@@ -21,6 +21,7 @@ from skillsmith.web import forge_submission
 
 ROOT = Path(__file__).parents[1]
 EXAMPLE = ROOT / "examples/retail-shelf-audit"
+PLANOGRAM = ROOT / "examples/planogram-compliance"
 
 
 def web_spec() -> dict:
@@ -265,6 +266,55 @@ class SkillSmithTests(unittest.TestCase):
             staged = (inbox / "new-cola.png").read_bytes()
             self.assertTrue(staged.startswith(b"\x89PNG"))
             self.assertNotEqual(staged, (EXAMPLE / "shelf-clear.png").read_bytes())
+
+    def test_reference_condition_and_gate(self):
+        spec = load_spec(PLANOGRAM / "workflow.json")
+        cases = {case["prompt"]: case for case in spec.data["evals"]}
+
+        def answer(case, mode):
+            truth = case["ground_truth"]["items"]
+            if mode == "baseline":
+                items = [{"shelf": 1, "sku_code": "red can", "observed_facings": 7, "status": "OK"}]
+            elif mode == "reference":
+                # Pasted data without the policy: flags anything below target as LOW.
+                items = [dict(item, status="LOW" if item["status"] == "OK" else item["status"]) for item in truth]
+            else:
+                items = truth
+            return json.dumps({"bay_id": "A12", "items": items, "uncertainties": []})
+
+        with tempfile.TemporaryDirectory() as tmp:
+            generated = forge(spec, Path(tmp) / "generated")
+            self.assertTrue((generated / "references/planogram-bay-A12.json").is_file())
+            self.assertIn("references/sku-master.json", (generated / "SKILL.md").read_text(encoding="utf-8"))
+            seen = {}
+
+            def fake_urlopen(request, timeout):
+                body = json.loads(request.data)
+                system = body["messages"][0]["content"]
+                mode = "skill" if system.startswith("Follow the Agent Skill") else (
+                    "reference" if "Reference data provided by the user" in system else "baseline")
+                seen[mode] = system
+                case = cases[body["messages"][1]["content"][0]["text"]]
+                return io.BytesIO(json.dumps({"choices": [{"message": {"content": answer(case, mode)}}]}).encode("utf-8"))
+
+            with patch("skillsmith.endpoint.urllib.request.urlopen", side_effect=fake_urlopen):
+                manifest = capture_ab(generated, PLANOGRAM, Path(tmp) / "capture",
+                                      base_url="http://127.0.0.1:8000/v1", model="local-test-model")
+            self.assertEqual(len(manifest["captures"]), 18)
+            self.assertIn("BEV-COLA-330", seen["reference"])
+            self.assertNotIn("min_facings 即为 OK", seen["reference"])
+            self.assertNotIn("BEV-COLA-330", seen["baseline"])
+            result = evaluate_fixtures(generated, Path(tmp) / "capture")
+            self.assertEqual(result["verdict"], "pass")
+            self.assertGreater(result["task"]["skill"], result["task"]["reference"])
+            self.assertIn("Pasted data", benchmark_markdown(result, spec.name, mode="live"))
+
+            # A skill that loses to simply pasting the data must not be installed.
+            for case in spec.data["evals"]:
+                if "ground_truth" in case:
+                    (Path(tmp) / "capture" / f"{case['id']}.reference.txt").write_text(answer(case, "skill"), encoding="utf-8")
+                    (Path(tmp) / "capture" / f"{case['id']}.skill.txt").write_text(answer(case, "reference"), encoding="utf-8")
+            self.assertEqual(evaluate_fixtures(generated, Path(tmp) / "capture")["verdict"], "fail")
 
 
 if __name__ == "__main__":

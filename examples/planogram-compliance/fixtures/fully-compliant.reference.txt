@@ -1,0 +1,71 @@
+```json
+{
+  "bay_id": "A12",
+  "items": [
+    {
+      "shelf": 1,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "WAT-550",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "TEA-250",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "CHP-070",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "TEA-250",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "TEA-250",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "WAT-550",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "CHP-070",
+      "observed_facings": 2,
+      "status": "MISPLACED"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 3,
+      "status": "MISPLACED"
+    }
+  ],
+  "uncertainties": [
+    "Shelf 3 is significantly misaligned with the planogram. The planogram specifies TEA-250, WAT-550, CHP-070, and BEV-COLA-330 from left to right, but the image shows TEA-250, WAT-550, CHP-070, and BEV-COLA-330 in a different order (TEA, WAT, CHP, BEV).",
+    "The planogram for shelf 3 requires CHP-070 to have 2 facings and BEV-COLA-330 to have 3 facings. The image shows the opposite: 3 facings of CHP-070 and 2 facings of BEV-COLA-330."
+  ]
+}
+```

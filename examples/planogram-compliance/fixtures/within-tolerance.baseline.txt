@@ -1,0 +1,71 @@
+```json
+{
+  "bay_id": "A12",
+  "items": [
+    {
+      "shelf": 1,
+      "sku_code": "RED-CAN",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "BLUE-BOTTLE",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "GREEN-BOX",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "YELLOW-BAG",
+      "observed_facings": 3,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "RED-CAN",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "GREEN-BOX",
+      "observed_facings": 3,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "GREEN-BOX",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "BLUE-BOTTLE",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "YELLOW-BAG",
+      "observed_facings": 2,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "RED-CAN",
+      "observed_facings": 2,
+      "status": "OK"
+    }
+  ],
+  "uncertainties": [
+    "无法获取陈列图，无法判断SKU的陈列位置是否合规。",
+    "无法判断各SKU的陈列面数（facings）是否符合陈列图要求。"
+  ]
+}
+```

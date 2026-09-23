@@ -6,7 +6,7 @@ import os
 import sys
 from pathlib import Path
 
-from .evaluate import benchmark_markdown, evaluate_fixtures
+from .evaluate import benchmark_markdown, evaluate_fixtures, load_scorer
 from .endpoint import capture_ab
 from .forge import forge
 from .install import install
@@ -48,6 +48,19 @@ def cmd_evaluate(args: argparse.Namespace) -> int:
     return int(result["verdict"] != "pass")
 
 
+def cmd_score(args: argparse.Namespace) -> int:
+    scorer = load_scorer(Path(args.skill).resolve())
+    if scorer is None:
+        raise ValueError("skill has no evals/scorer.py")
+    truth = json.loads(Path(args.ground_truth).read_text(encoding="utf-8"))
+    if args.key:
+        truth = truth[args.key]
+    output = json.loads(Path(args.result).read_text(encoding="utf-8"))
+    metrics = {name: round(float(value), 3) for name, value in scorer(output, truth).items()}
+    _json({"metrics": metrics, "task_score": round(sum(metrics.values()) / len(metrics), 3)})
+    return 0
+
+
 def cmd_install(args: argparse.Namespace) -> int:
     target = install(args.skill, args.destination, force=args.force)
     _json({"status": "ok", "installed": str(target)})
@@ -77,6 +90,7 @@ def _triggers(args: argparse.Namespace, skill: str | Path, output: str | Path) -
             input_root=args.input_root,
             profile=args.openclaw_profile,
             repeats=args.trigger_repeats,
+            neighbours=args.neighbour_skill or [],
         )
     return evaluate_triggers(
         skill,
@@ -172,6 +186,7 @@ def _add_trigger_arguments(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument("--input-root", help="directory holding eval inputs (openclaw harness)")
     parser.add_argument("--openclaw-profile", default="skillsmith-eval")
+    parser.add_argument("--neighbour-skill", action="append", help="another installed skill to place beside the one under test (repeatable)")
     parser.add_argument("--base-url")
     parser.add_argument("--model")
     parser.add_argument("--trigger-repeats", type=int, default=3)
@@ -205,6 +220,13 @@ def build_parser() -> argparse.ArgumentParser:
     trigger_parser.add_argument("--output", required=True)
     _add_trigger_arguments(trigger_parser)
     trigger_parser.set_defaults(func=cmd_trigger_eval)
+
+    score_parser = sub.add_parser("score", help="score one runner result against ground truth with the skill's scorer")
+    score_parser.add_argument("skill")
+    score_parser.add_argument("--result", required=True)
+    score_parser.add_argument("--ground-truth", required=True)
+    score_parser.add_argument("--key", help="entry to use when the ground-truth file holds several")
+    score_parser.set_defaults(func=cmd_score)
 
     install_parser = sub.add_parser("install", help="install a verified skill into an agent workspace")
     install_parser.add_argument("skill")

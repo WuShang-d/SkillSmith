@@ -16,7 +16,10 @@ This file tracks evidence against the actual competition objective. A checked it
 | Replay with a new input on DGX multimodal inference | Verified on DGX | `evidence/dgx-2026-09-20/replay/result.json`; exact required fields validated by the runner |
 | Non-technical browser workflow | Verified locally in a real browser | `skillsmith/web.py`; browser result showed PASS/READY |
 | End-to-end duration under 10 minutes on DGX | Verified: 182 s for forge → scan → A/B → 60 router trigger runs | `evidence/dgx-2026-09-23/` (the OpenClaw trigger pass is separate, ~70 s per agent run) |
-| A skill that passes the fair gate | **Open** — the retail example does not beat the baseline | `evidence/dgx-2026-09-23/README.md` |
+| A skill that passes the fair gate | Verified on DGX: `planogram-compliance` 81.4% vs pasted data 72.6% vs baseline 11.1% | `evidence/dgx-2026-09-24/planogram-compliance/` |
+| Skill beats simply pasting its reference data | Verified on DGX (+8.8 pts, fewer tokens, lower latency) | same; gate rule in `evaluate_fixtures` |
+| Replay on a held-out input, scored | Verified on DGX: 3/3 real deviations found, 1 false LOW, task score 88.6% | `evidence/dgx-2026-09-24/planogram-compliance/replay/` |
+| Roadshow shows the gate blocking and shipping | Rehearsed on DGX end to end in 580 s | `evidence/dgx-2026-09-24/demo-rehearsal.log` |
 | Reusable SkillSmith skill package | Verified structurally | `skills-src/skillsmith`; `quick_validate.py` |
 | Stable roadshow narrative and fallback | Technically rehearsed on DGX | Two complete `scripts/demo-dgx.sh` runs; final evidence snapshot and `docs/ROADSHOW.md` |
 

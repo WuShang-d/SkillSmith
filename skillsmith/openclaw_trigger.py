@@ -101,6 +101,7 @@ def evaluate_openclaw_triggers(
     openclaw: str = "openclaw",
     repeats: int = 3,
     timeout: int = 240,
+    neighbours: list[str | Path] = (),
 ) -> dict[str, Any]:
     root = Path(skill_dir).resolve()
     output = Path(output_dir).resolve()
@@ -110,10 +111,13 @@ def evaluate_openclaw_triggers(
     workspace = profile_dir(profile) / "workspace"
     if not (profile_dir(profile) / "openclaw.json").is_file():
         raise ValueError(f"OpenClaw profile is not configured: {profile_dir(profile)}; run scripts/setup-openclaw-dgx.sh")
-    installed = workspace / "skills" / name
-    if installed.exists():
-        shutil.rmtree(installed)
-    shutil.copytree(root, installed)
+    # Only the skill under test and explicitly named neighbours sit next to OpenClaw's bundled skills.
+    skills_dir = workspace / "skills"
+    if skills_dir.exists():
+        shutil.rmtree(skills_dir)
+    skills_dir.mkdir(parents=True)
+    for skill in (root, *(Path(n).resolve() for n in neighbours)):
+        shutil.copytree(skill, skills_dir / skill_frontmatter(skill)["name"])
 
     inbox = workspace / "inbox"
     if inbox.exists():
@@ -154,6 +158,7 @@ def evaluate_openclaw_triggers(
         "method": "openclaw",
         "harness": version,
         "profile": profile,
+        "neighbours": [skill_frontmatter(Path(n).resolve())["name"] for n in neighbours],
         "repeats": repeats,
         "runs": len(runs),
         "accuracy": round(sum(run["triggered"] == run["should_trigger"] for run in runs) / len(runs), 3),

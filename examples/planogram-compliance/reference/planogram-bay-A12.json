@@ -1,0 +1,24 @@
+{
+  "store": "Demo Store 0921",
+  "bay_id": "A12",
+  "effective_from": "2026-09-01",
+  "note": "Shelf 1 is the top shelf. Slots are listed left to right.",
+  "shelves": {
+    "1": [
+      {"sku_code": "BEV-COLA-330", "target_facings": 7, "min_facings": 5},
+      {"sku_code": "WAT-550", "target_facings": 7, "min_facings": 5},
+      {"sku_code": "TEA-250", "target_facings": 6, "min_facings": 4}
+    ],
+    "2": [
+      {"sku_code": "CHP-070", "target_facings": 4, "min_facings": 3},
+      {"sku_code": "BEV-COLA-330", "target_facings": 5, "min_facings": 4},
+      {"sku_code": "TEA-250", "target_facings": 4, "min_facings": 3}
+    ],
+    "3": [
+      {"sku_code": "TEA-250", "target_facings": 5, "min_facings": 4},
+      {"sku_code": "WAT-550", "target_facings": 6, "min_facings": 4},
+      {"sku_code": "CHP-070", "target_facings": 2, "min_facings": 1},
+      {"sku_code": "BEV-COLA-330", "target_facings": 3, "min_facings": 2}
+    ]
+  }
+}

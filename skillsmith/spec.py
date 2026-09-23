@@ -28,6 +28,10 @@ class WorkflowSpec:
         return str(self.data["description"])
 
     @property
+    def reference_paths(self) -> list[Path]:
+        return [(self.source.parent / item).resolve() for item in self.data.get("references", [])]
+
+    @property
     def scorer_path(self) -> Path | None:
         scorer = self.data.get("scorer")
         return (self.source.parent / scorer).resolve() if scorer else None
@@ -96,6 +100,22 @@ def load_spec(path: str | Path) -> WorkflowSpec:
         raise SpecError("output_contract.required_fields must be a list of strings")
     if "schema_hint" in output and not isinstance(output["schema_hint"], str):
         raise SpecError("output_contract.schema_hint must be text")
+
+    references = data.get("references", [])
+    if not isinstance(references, list) or any(not isinstance(item, str) or not item for item in references):
+        raise SpecError("references must be a list of relative file paths")
+    names = set()
+    for item in references:
+        path = (source.parent / item).resolve()
+        try:
+            path.relative_to(source.parent)
+        except ValueError as exc:
+            raise SpecError(f"reference must stay beneath the workflow directory: {item}") from exc
+        if not path.is_file():
+            raise SpecError(f"reference does not exist: {path}")
+        if path.name in names:
+            raise SpecError(f"reference file names must be unique: {path.name}")
+        names.add(path.name)
 
     scorer = data.get("scorer")
     if scorer is not None:

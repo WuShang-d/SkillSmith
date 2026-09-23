@@ -1,14 +1,45 @@
 {
   "note": "Neighbouring skills that share an agent's catalogue with the skill under test. Names follow the NVIDIA/skills catalogue and common agent skills; descriptions are short paraphrased stand-ins written for trigger evaluation, not the official text.",
   "skills": [
-    {"name": "tao-generate-image-grounding", "description": "Open-vocabulary object grounding on an image: given an image and a caption of what to find, return phrases, pixel bounding boxes and scores. Use when the user wants boxes around specific object types."},
-    {"name": "vss-ask-video", "description": "Answer ad-hoc visual questions about a recorded video clip, such as what happened at a given timestamp. Not for long-video summaries."},
-    {"name": "vss-summarize-video", "description": "Summarize a long recorded video into a timeline of notable events. Use for 'summarize this footage' requests."},
-    {"name": "local-pedestrian-detector", "description": "Detect pedestrians in a street or campus photo and return person boxes with neutral appearance descriptions. Never infers identity, age, nationality or intent."},
-    {"name": "accelerated-computing-cudf", "description": "GPU-accelerated dataframe analysis with cuDF for CSV/Parquet data: aggregations, joins, time series, and charts."},
-    {"name": "cuopt-routing-api-python", "description": "Solve vehicle routing and delivery scheduling problems with NVIDIA cuOpt from Python."},
-    {"name": "rag-blueprint", "description": "Deploy, configure, troubleshoot or shut down the NVIDIA RAG Blueprint for enterprise document question answering."},
-    {"name": "marketing-copywriter", "description": "Write marketing copy, social media posts, slogans and promotional poster text for products."},
-    {"name": "inventory-replenishment", "description": "Generate replenishment orders from inventory database records and sales velocity. Works on data only, not on photos."}
+    {
+      "name": "tao-generate-image-grounding",
+      "description": "Open-vocabulary object grounding on an image: given an image and a caption of what to find, return phrases, pixel bounding boxes and scores. Use when the user wants boxes around specific object types."
+    },
+    {
+      "name": "vss-ask-video",
+      "description": "Answer ad-hoc visual questions about a recorded video clip, such as what happened at a given timestamp. Not for long-video summaries."
+    },
+    {
+      "name": "vss-summarize-video",
+      "description": "Summarize a long recorded video into a timeline of notable events. Use for 'summarize this footage' requests."
+    },
+    {
+      "name": "local-pedestrian-detector",
+      "description": "Detect pedestrians in a street or campus photo and return person boxes with neutral appearance descriptions. Never infers identity, age, nationality or intent."
+    },
+    {
+      "name": "accelerated-computing-cudf",
+      "description": "GPU-accelerated dataframe analysis with cuDF for CSV/Parquet data: aggregations, joins, time series, and charts."
+    },
+    {
+      "name": "cuopt-routing-api-python",
+      "description": "Solve vehicle routing and delivery scheduling problems with NVIDIA cuOpt from Python."
+    },
+    {
+      "name": "rag-blueprint",
+      "description": "Deploy, configure, troubleshoot or shut down the NVIDIA RAG Blueprint for enterprise document question answering."
+    },
+    {
+      "name": "marketing-copywriter",
+      "description": "Write marketing copy, social media posts, slogans and promotional poster text for products."
+    },
+    {
+      "name": "inventory-replenishment",
+      "description": "Generate replenishment orders from inventory database records and sales velocity. Works on data only, not on photos."
+    },
+    {
+      "name": "retail-shelf-audit",
+      "description": "Inspect a retail shelf photo and return front-row SKU facings per shelf, empty gaps, image quality, and uncertainties as structured JSON."
+    }
   ]
 }
