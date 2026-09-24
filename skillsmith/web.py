@@ -16,7 +16,7 @@ from .evaluate import benchmark_markdown, evaluate_fixtures
 from .endpoint import capture_ab
 from .forge import forge
 from .install import install
-from .security import report, scan
+from .security import full_scan
 from .spec import load_spec
 
 
@@ -111,7 +111,7 @@ def forge_submission(payload: dict[str, Any], workspace: Path) -> dict[str, Any]
 
     spec = load_spec(spec_path)
     generated = forge(spec, run_root / "generated")
-    security_result = report(scan(generated))
+    security_result = full_scan(generated)
     (generated / "SECURITY_REPORT.json").write_text(
         json.dumps(security_result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )

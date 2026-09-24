@@ -316,6 +316,82 @@ class SkillSmithTests(unittest.TestCase):
                     (Path(tmp) / "capture" / f"{case['id']}.skill.txt").write_text(answer(case, "reference"), encoding="utf-8")
             self.assertEqual(evaluate_fixtures(generated, Path(tmp) / "capture")["verdict"], "fail")
 
+    def test_skill_card_follows_nvidia_sections(self):
+        from skillsmith.card import write_skill_card
+        spec = load_spec(PLANOGRAM / "workflow.json")
+        with tempfile.TemporaryDirectory() as tmp:
+            generated = forge(spec, Path(tmp) / "generated")
+            evaluation = evaluate_fixtures(generated, PLANOGRAM / "fixtures")
+            card = write_skill_card(
+                generated, evaluation=evaluation, security=report(scan(generated)),
+                signer="CN=Test Signer",
+            ).read_text(encoding="utf-8")
+        headings = [line[3:] for line in card.splitlines() if line.startswith("## ")]
+        self.assertEqual(headings, [
+            "Description", "Owner", "License/Terms of Use", "Use Case", "Deployment Geography for Use",
+            "Requirements / Dependencies", "Known Risks and Mitigations", "References", "Skill Output",
+            "Skill Version", "Ethical Considerations", "Release Evidence",
+        ])
+        self.assertIn("Requires API Key or External Credential: No", card)
+        self.assertIn("pasted reference data", card)
+        self.assertIn("Signed by `CN=Test Signer`", card)
+
+    def _fake_tool(self, directory: Path, name: str, body: str) -> Path:
+        path = directory / name
+        path.write_text("#!" + sys.executable + "\n" + body, encoding="utf-8")
+        path.chmod(0o755)
+        return path
+
+    def test_skillspector_recommendation_gates_install(self):
+        from skillsmith.security import full_scan
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            generated = forge(load_spec(EXAMPLE / "workflow.json"), tmp_path / "generated")
+            for recommendation, code, verdict in (("SAFE", 0, "pass"), ("DO_NOT_INSTALL", 1, "fail")):
+                tool = self._fake_tool(tmp_path, f"spector-{code}", f"""
+import json, sys
+args = sys.argv[1:]
+assert args[0] == "scan" and "--no-llm" in args and args[args.index("-f") + 1] == "json"
+out = args[args.index("-o") + 1]
+json.dump({{"risk_assessment": {{"score": 80 if {code} else 5, "severity": "HIGH", "recommendation": "{recommendation}"}},
+           "issues": [], "metadata": {{"skillspector_version": "9.9", "llm_requested": False}}}}, open(out, "w"))
+sys.exit({code})
+""")
+                with patch.dict("os.environ", {"SKILLSMITH_SKILLSPECTOR": str(tool)}):
+                    result = full_scan(generated, require_skillspector=True)
+                self.assertEqual(result["verdict"], verdict)
+                self.assertEqual(result["engines"], ["skillsmith-rules", "skillspector"])
+                self.assertEqual(result["skillspector"]["recommendation"], recommendation)
+            with patch.dict("os.environ", {"SKILLSMITH_SKILLSPECTOR": "", "PATH": ""}):
+                with self.assertRaisesRegex(ValueError, "SkillSpector is required"):
+                    full_scan(generated, require_skillspector=True)
+
+    def test_install_verifies_signature_before_and_after_copy(self):
+        from skillsmith.sign import SIGNATURE
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            generated = forge(load_spec(EXAMPLE / "workflow.json"), tmp_path / "generated")
+            (generated / SIGNATURE).write_text("{}", encoding="utf-8")
+            log = tmp_path / "calls.log"
+            tool = self._fake_tool(tmp_path, "model_signing", f"""
+import sys, pathlib
+open({str(log)!r}, "a").write(" ".join(sys.argv[1:]) + "\\n")
+tampered = pathlib.Path(sys.argv[3], "TAMPERED").exists()
+print("Verification failed" if tampered else "Verification succeeded")
+sys.exit(1 if tampered else 0)
+""")
+            chain = tmp_path / "root-cert.pem"
+            chain.write_text("root", encoding="utf-8")
+            with patch.dict("os.environ", {"SKILLSMITH_MODEL_SIGNING": str(tool)}):
+                installed = install(generated, tmp_path / "skills", verify_chain=chain)
+                calls = log.read_text(encoding="utf-8").splitlines()
+                self.assertEqual(len(calls), 2)
+                self.assertTrue(all(call.startswith("verify certificate") and "--certificate_chain" in call for call in calls))
+                (generated / "TAMPERED").write_text("x", encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "signature verification failed"):
+                    install(generated, tmp_path / "skills", force=True, verify_chain=chain)
+            self.assertTrue((installed / "SKILL.md").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

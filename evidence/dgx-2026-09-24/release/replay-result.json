@@ -1,0 +1,69 @@
+{
+  "bay_id": "A12",
+  "items": [
+    {
+      "shelf": 1,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 4,
+      "status": "LOW"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "WAT-550",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "TEA-250",
+      "observed_facings": 5,
+      "status": "LOW"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "CHP-070",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "TEA-250",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "TEA-250",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "WAT-550",
+      "observed_facings": 3,
+      "status": "LOW"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "CHP-070",
+      "observed_facings": 0,
+      "status": "OOS"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 3,
+      "status": "OK"
+    }
+  ],
+  "uncertainties": [
+    "MISPLACED: Shelf 2 contains 4 facings of TEA-250 (green cartons), which is not planned for this shelf.",
+    "MISPLACED: Shelf 3 contains 1 facing of TEA-250 (green carton) on the far right, which is not planned for this shelf."
+  ]
+}

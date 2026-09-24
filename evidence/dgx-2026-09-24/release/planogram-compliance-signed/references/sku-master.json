@@ -1,0 +1,9 @@
+{
+  "note": "Visual identification of this store's brandless demo SKUs.",
+  "skus": [
+    {"sku_code": "BEV-COLA-330", "name": "可乐 330ml 罐装", "visual": "red aluminium can, usually stacked two high"},
+    {"sku_code": "WAT-550", "name": "饮用水 550ml", "visual": "clear blue plastic bottle with a blue cap"},
+    {"sku_code": "TEA-250", "name": "绿茶 250ml 利乐盒", "visual": "green carton with a leaf pattern"},
+    {"sku_code": "CHP-070", "name": "原味薯片 70g", "visual": "yellow snack pouch showing chips"}
+  ]
+}

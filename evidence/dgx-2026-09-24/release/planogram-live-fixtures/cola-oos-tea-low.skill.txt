@@ -1,0 +1,83 @@
+```json
+{
+  "bay_id": "A12",
+  "items": [
+    {
+      "shelf": 1,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "WAT-550",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "TEA-250",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "CHP-070",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 0,
+      "status": "OOS"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "TEA-250",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "TEA-250",
+      "observed_facings": 3,
+      "status": "LOW"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "WAT-550",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "CHP-070",
+      "observed_facings": 2,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 3,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "TEA-250",
+      "observed_facings": 4,
+      "status": "MISPLACED"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "CHP-070",
+      "observed_facings": 2,
+      "status": "MISPLACED"
+    }
+  ],
+  "uncertainties": [
+    "Shelf 2: The planogram requires BEV-COLA-330 in the middle section, but the image shows a gap. This is recorded as OOS.",
+    "Shelf 3: The planogram requires TEA-250 on the left, but the image shows TEA-250 on the far left. This is recorded as LOW (3 facings) and also flagged as MISPLACED because it is in the wrong slot."
+  ]
+}
+```

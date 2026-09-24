@@ -1,0 +1,57 @@
+{
+  "verdict": "pass",
+  "counts": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "findings": [],
+  "engines": [
+    "skillsmith-rules",
+    "skillspector"
+  ],
+  "skillspector": {
+    "engine": "skillspector",
+    "version": "2.12.0",
+    "exit_code": 0,
+    "score": 3,
+    "severity": "LOW",
+    "recommendation": "CAUTION",
+    "llm_used": false,
+    "issues": [
+      {
+        "id": "PE1",
+        "finding_id": "finding-c4c167532fd74843af9b62e69166f57b",
+        "category": "Privilege Escalation",
+        "pattern": "Excessive Permissions",
+        "severity": "LOW",
+        "confidence": 0.6,
+        "location": {
+          "file": "SKILL.md",
+          "start_line": 6,
+          "end_line": null,
+          "start_column": 0
+        },
+        "finding": "permissions: [\"network: loopback model endpoint 127.0.0.1 only\", \"file_read: input image and bundled references\", \"file_write",
+        "explanation": "Skill requests more permissions than appear necessary for its stated functionality. Review if elevated access is justified.",
+        "remediation": "Request only the minimum permissions required. Document why each permission is needed. Remove broad permissions like '*' or 'all'.",
+        "code_snippet": "description: \"Check a shelf photo of store bay A12 against the store's planogram and SKU master, and report each planned SKU as OK, LOW or OOS plus any MISPLACED SKU, using the store's SKU codes. Use when: 检查货架照片是否符合陈列图 / planogram; 巡检 A12 货架的陈列合规、缺货和错放; 按门店 SKU 编码输出每个商品的陈列状态; check a shelf photo against the planogram. Do not use for: 只统计货架排面或空位，不对照陈列图; 根据库存数据库生成补货单但没有图片; 撰写商品营销或促销文案; 识别顾客身份或人口属性.\"\nlicense: Apache-2.0\nallowed-tools: Read Bash(python3 scripts/run.py:*)\npermissions: [\"network: loopback model endpoint 127.0.0.1 only\", \"file_read: input image and bundled references\", \"file_write: user-selected output directory\"]\n---\n\n# 门店陈列合规巡检",
+        "intent": null,
+        "tags": [
+          "Privilege Escalation"
+        ],
+        "evidence": {},
+        "match_fingerprint": "5f9387f9de6426dfb2f1a8fcf29d589700b6419d26b5ed225b6e6a73969a6e2e",
+        "occurrences": [
+          {
+            "file": "SKILL.md",
+            "start_line": 6,
+            "end_line": null,
+            "start_column": 0
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,818 @@
+{
+  "skill": {
+    "name": "planogram-compliance",
+    "source": "/tmp/old-ss/gen/planogram-compliance",
+    "scanned_at": "2026-09-24T01:35:45.723559+00:00"
+  },
+  "risk_assessment": {
+    "score": 100,
+    "severity": "CRITICAL",
+    "recommendation": "DO_NOT_INSTALL",
+    "max_issue_severity": "CRITICAL"
+  },
+  "components": [
+    {
+      "path": "SKILL.md",
+      "type": "markdown",
+      "lines": 66,
+      "executable": false,
+      "size_bytes": 3719,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "evals/evals.json",
+      "type": "json",
+      "lines": 473,
+      "executable": false,
+      "size_bytes": 12231,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "evals/scorer.py",
+      "type": "python",
+      "lines": 75,
+      "executable": true,
+      "size_bytes": 2809,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "references/planogram-bay-A12.json",
+      "type": "json",
+      "lines": 24,
+      "executable": false,
+      "size_bytes": 942,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "references/sku-master.json",
+      "type": "json",
+      "lines": 9,
+      "executable": false,
+      "size_bytes": 536,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "references/workflow.json",
+      "type": "json",
+      "lines": 65,
+      "executable": false,
+      "size_bytes": 3282,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "scripts/run.py",
+      "type": "python",
+      "lines": 116,
+      "executable": true,
+      "size_bytes": 5371,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "evals/__pycache__/scorer.cpython-312.pyc",
+      "type": "other",
+      "lines": 0,
+      "executable": true,
+      "size_bytes": 3912,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    }
+  ],
+  "structured_summaries": [],
+  "issues": [
+    {
+      "id": "TT3",
+      "finding_id": "finding-ac41ec1c400c43e8905b35fdf5aa2eab",
+      "category": "Data Flow",
+      "pattern": "Tainted flow: 'request' from os.environ.get (line 78, credential/environment) \u2192 urllib.request.urlopen (network output)",
+      "severity": "CRITICAL",
+      "confidence": 0.9,
+      "location": {
+        "file": "scripts/run.py",
+        "start_line": 87,
+        "end_line": 87,
+        "start_column": 17,
+        "end_column": 61
+      },
+      "finding": "urllib.request.urlopen(request, timeout=180)",
+      "explanation": "Credentials or environment variables flow to a network sink. This is a high-confidence indicator of credential exfiltration.",
+      "remediation": "Never send credentials or environment variables over the network. Use secure credential stores and avoid transmitting secrets in request bodies or URLs.",
+      "code_snippet": "            },\n        )\n        try:\n            with urllib.request.urlopen(request, timeout=180) as response:\n                body = json.load(response)\n        except urllib.error.URLError as exc:\n            raise SystemExit(f\"model request failed: {exc}\") from exc",
+      "intent": null,
+      "tags": [
+        "Data Flow"
+      ],
+      "evidence": {},
+      "match_fingerprint": "3ca5c2dd06601ba489e9fade4691a098c05db2637c7fa6b3f824542047af0906",
+      "occurrences": [
+        {
+          "file": "scripts/run.py",
+          "start_line": 87,
+          "end_line": 87,
+          "start_column": 17,
+          "end_column": 61
+        }
+      ]
+    },
+    {
+      "id": "SC8",
+      "finding_id": "finding-870f89d5acc84b7793c28541be8d8654",
+      "category": "Supply Chain",
+      "pattern": "Skill ships a __pycache__ directory that normal discovery skips",
+      "severity": "HIGH",
+      "confidence": 0.95,
+      "location": {
+        "file": "evals/__pycache__/",
+        "start_line": 1,
+        "end_line": null
+      },
+      "finding": "evals/__pycache__/",
+      "explanation": "Skill ships Python bytecode (__pycache__/ or .pyc/.pyo). Discovery skips these paths, so malicious bytecode can score SAFE while decoy sources look clean.",
+      "remediation": "Do not ship __pycache__/ or .pyc/.pyo in skills. Delete bytecode before packaging; if presence is intentional for a lab fixture, quarantine it outside the skill install path.",
+      "code_snippet": "Python may load .pyc from this directory even when decoy .py sources look clean (PEP 552 UNCHECKED_HASH).",
+      "intent": null,
+      "tags": [
+        "Supply Chain"
+      ],
+      "evidence": {},
+      "match_fingerprint": "a342f9356127db691ca2644fa3407960606301e7b988226a04deceb03555680e",
+      "occurrences": [
+        {
+          "file": "evals/__pycache__/",
+          "start_line": 1,
+          "end_line": null
+        }
+      ]
+    },
+    {
+      "id": "SC8",
+      "finding_id": "finding-ab6fc53411394bca93c8a3ccf29ba8e3",
+      "category": "Supply Chain",
+      "pattern": "Skill ships Python bytecode (.pyc/.pyo) that normal analysis skips",
+      "severity": "HIGH",
+      "confidence": 0.95,
+      "location": {
+        "file": "evals/__pycache__/scorer.cpython-312.pyc",
+        "start_line": 1,
+        "end_line": null
+      },
+      "finding": "scorer.cpython-312.pyc",
+      "explanation": "Skill ships Python bytecode (__pycache__/ or .pyc/.pyo). Discovery skips these paths, so malicious bytecode can score SAFE while decoy sources look clean.",
+      "remediation": "Do not ship __pycache__/ or .pyc/.pyo in skills. Delete bytecode before packaging; if presence is intentional for a lab fixture, quarantine it outside the skill install path.",
+      "code_snippet": "Bytecode is excluded from content analysis; a malicious .pyc can execute while source decoys remain clean.",
+      "intent": null,
+      "tags": [
+        "Supply Chain"
+      ],
+      "evidence": {},
+      "match_fingerprint": "b6135893b5f6a0486d5014cb9c5ccec9f0a009bdd871a9f632a6f84ec9214203",
+      "occurrences": [
+        {
+          "file": "evals/__pycache__/scorer.cpython-312.pyc",
+          "start_line": 1,
+          "end_line": null
+        }
+      ]
+    },
+    {
+      "id": "SC9",
+      "finding_id": "finding-0182a89b96e345a1b24e63306fdf7c09",
+      "category": "Supply Chain",
+      "pattern": "Concealed Executable Artifact",
+      "severity": "HIGH",
+      "confidence": 1.0,
+      "location": {
+        "file": "evals/__pycache__/scorer.cpython-312.pyc",
+        "start_line": 1,
+        "end_line": null
+      },
+      "finding": "evals/__pycache__/scorer.cpython-312.pyc",
+      "explanation": "An executable artifact remains available under the skill install path but its content is outside analyzer coverage.",
+      "remediation": "Review the artifact provenance and the reason executable content is packaged in this location; keep executable files explicit and directly reviewable.",
+      "code_snippet": null,
+      "intent": null,
+      "tags": [
+        "supply-chain",
+        "concealed-executable",
+        "local-only"
+      ],
+      "evidence": {
+        "outer_path": "evals/__pycache__/scorer.cpython-312.pyc",
+        "nested_path": "evals/__pycache__/scorer.cpython-312.pyc",
+        "container_type": "filesystem",
+        "container_ancestry": [
+          "filesystem"
+        ],
+        "container_depth": 0,
+        "concealment": "excluded_directory",
+        "concealment_reasons": [
+          "excluded_directory"
+        ],
+        "local_only": true,
+        "referenced": false,
+        "excluded_from_analysis": true,
+        "excluded_inspection_incomplete": false,
+        "inherited_exclusion_reason": "excluded_directory",
+        "inspection_limitation_reason": null
+      },
+      "match_fingerprint": "dd9ba2848e8346f065f6c3f5e1df4161eed4861b7d351714eb3af18bd36bf2b5",
+      "occurrences": [
+        {
+          "file": "evals/__pycache__/scorer.cpython-312.pyc",
+          "start_line": 1,
+          "end_line": null
+        }
+      ]
+    },
+    {
+      "id": "LP3",
+      "finding_id": "finding-4a42c41e641b479187c5060134e0a8cd",
+      "category": "MCP Least Privilege",
+      "pattern": null,
+      "severity": "MEDIUM",
+      "confidence": 0.7,
+      "location": {
+        "file": "SKILL.md",
+        "start_line": 1,
+        "end_line": null
+      },
+      "finding": null,
+      "explanation": "Without declared permissions the skill's intent is opaque and cannot be validated.",
+      "remediation": "Declare the skill's tool scope: for Claude Code / Agent Skills SKILL.md, list the tools the skill may invoke in the 'allowed-tools' frontmatter field; for MCP server manifests, add a 'permissions' list naming the required capabilities.",
+      "code_snippet": null,
+      "intent": null,
+      "tags": [
+        "ASI02"
+      ],
+      "evidence": {},
+      "match_fingerprint": null,
+      "occurrences": [
+        {
+          "file": "SKILL.md",
+          "start_line": 1,
+          "end_line": null
+        }
+      ]
+    }
+  ],
+  "suppressed_count": 0,
+  "suppressed": [],
+  "metadata": {
+    "has_executable_scripts": true,
+    "skillspector_version": "2.12.0",
+    "llm_requested": false,
+    "llm_available": false,
+    "meta_analysis_applied": false,
+    "inference_usage": [],
+    "llm_provenance": {
+      "schema_version": 1,
+      "provider": {
+        "configured_adapter": "nv_build",
+        "resolved_adapter": "nv_build",
+        "effective_adapter": "not_applicable",
+        "effective_adapters": [],
+        "service": "unknown",
+        "routing": {
+          "deployment_override": null,
+          "deployment_source": "not_applicable",
+          "api_version": null,
+          "api_version_source": "not_applicable"
+        }
+      },
+      "analyzers": [
+        {
+          "analyzer_id": "mcp_tool_poisoning",
+          "model": "z-ai/glm-5.2",
+          "model_source": "resolved_configuration",
+          "analyzer_revision": {
+            "value": "2.12.0",
+            "source": "skillspector_package",
+            "source_revision": {
+              "value": "unknown",
+              "source": "unknown"
+            }
+          }
+        },
+        {
+          "analyzer_id": "semantic_developer_intent",
+          "model": "z-ai/glm-5.2",
+          "model_source": "resolved_configuration",
+          "analyzer_revision": {
+            "value": "2.12.0",
+            "source": "skillspector_package",
+            "source_revision": {
+              "value": "unknown",
+              "source": "unknown"
+            }
+          }
+        },
+        {
+          "analyzer_id": "semantic_quality_policy",
+          "model": "z-ai/glm-5.2",
+          "model_source": "resolved_configuration",
+          "analyzer_revision": {
+            "value": "2.12.0",
+            "source": "skillspector_package",
+            "source_revision": {
+              "value": "unknown",
+              "source": "unknown"
+            }
+          }
+        },
+        {
+          "analyzer_id": "semantic_security_discovery",
+          "model": "z-ai/glm-5.2",
+          "model_source": "resolved_configuration",
+          "analyzer_revision": {
+            "value": "2.12.0",
+            "source": "skillspector_package",
+            "source_revision": {
+              "value": "unknown",
+              "source": "unknown"
+            }
+          }
+        },
+        {
+          "analyzer_id": "meta_analyzer",
+          "model": "z-ai/glm-5.2",
+          "model_source": "resolved_configuration",
+          "analyzer_revision": {
+            "value": "2.12.0",
+            "source": "skillspector_package",
+            "source_revision": {
+              "value": "unknown",
+              "source": "unknown"
+            }
+          }
+        }
+      ],
+      "sampling": {
+        "temperature": {
+          "requested": null,
+          "source": "provider_default",
+          "forwarded_to_client": null,
+          "adapter_support": true,
+          "provider_support": "unknown"
+        },
+        "seed": {
+          "requested": null,
+          "source": "unset",
+          "forwarded_to_client": null,
+          "adapter_support": true,
+          "provider_support": "unknown"
+        },
+        "reasoning_effort": {
+          "requested": null,
+          "source": "provider_default",
+          "forwarded_to_client": null,
+          "adapter_support": true,
+          "provider_support": "unknown"
+        }
+      },
+      "determinism": {
+        "classification": "not_applicable",
+        "control_status": "not_applied",
+        "provider_guarantee": false,
+        "reason": "LLM analysis was not executed for this scan."
+      }
+    },
+    "filtering_mode": "heuristic"
+  },
+  "execution_successful": true,
+  "analysis_completeness": {
+    "total_components": 7,
+    "scanned_components": 7,
+    "coverage_percent": 100.0,
+    "is_complete": false,
+    "status": "partial",
+    "execution_successful": true,
+    "fully_inspected_files": 7,
+    "partially_inspected_files": 0,
+    "entirely_uninspected_files": 0,
+    "ledger_exceptions": [
+      {
+        "outcome": "partial",
+        "phase": "exclusion_audit",
+        "reason_code": "excluded_executable_content",
+        "message": "Executable content was inventoried but excluded from content analysis.",
+        "path": "evals/__pycache__/scorer.cpython-312.pyc",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      }
+    ],
+    "scope_exclusions": [
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "excluded_directory",
+        "message": "Directory tree is excluded from the configured scan scope.",
+        "path": "evals/__pycache__/",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "exclusion_audit",
+        "reason_code": "excluded_directory",
+        "message": "Directory tree is excluded from the configured scan scope.",
+        "path": "evals/__pycache__/scorer.cpython-312.pyc",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      }
+    ],
+    "analyzer_statuses": [
+      {
+        "analyzer_id": "artifact_integrity",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "behavioral_ast",
+        "status": "completed",
+        "planned_work": 2,
+        "completed": 2,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "behavioral_taint_tracking",
+        "status": "completed",
+        "planned_work": 2,
+        "completed": 2,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "bundled_execution_surface",
+        "status": "not_applicable",
+        "planned_work": 0,
+        "completed": 0,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0,
+        "reason_code": "no_applicable_files",
+        "message": "No files matched this analyzer's applicability contract."
+      },
+      {
+        "analyzer_id": "mcp_least_privilege",
+        "status": "completed",
+        "planned_work": 4,
+        "completed": 4,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "mcp_rug_pull",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "mcp_tool_poisoning",
+        "status": "completed",
+        "planned_work": 1,
+        "completed": 1,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "meta_analyzer",
+        "status": "disabled",
+        "planned_work": 0,
+        "completed": 0,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0,
+        "reason_code": "disabled_by_configuration",
+        "message": "Analyzer was disabled by the requested configuration."
+      },
+      {
+        "analyzer_id": "semantic_developer_intent",
+        "status": "disabled",
+        "planned_work": 0,
+        "completed": 0,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0,
+        "reason_code": "disabled_by_configuration",
+        "message": "Analyzer was disabled by the requested configuration."
+      },
+      {
+        "analyzer_id": "semantic_quality_policy",
+        "status": "disabled",
+        "planned_work": 0,
+        "completed": 0,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0,
+        "reason_code": "disabled_by_configuration",
+        "message": "Analyzer was disabled by the requested configuration."
+      },
+      {
+        "analyzer_id": "semantic_security_discovery",
+        "status": "disabled",
+        "planned_work": 0,
+        "completed": 0,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0,
+        "reason_code": "disabled_by_configuration",
+        "message": "Analyzer was disabled by the requested configuration."
+      },
+      {
+        "analyzer_id": "static_patterns_agent_snooping",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_anti_refusal",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_data_exfiltration",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_deserialization",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_excessive_agency",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_harmful_content",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_memory_poisoning",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_output_handling",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_privilege_escalation",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_prompt_injection",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_rogue_agent",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_ssrf",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_supply_chain",
+        "status": "completed",
+        "planned_work": 9,
+        "completed": 9,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_system_prompt_leakage",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_tool_misuse",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_yara",
+        "status": "completed",
+        "planned_work": 7,
+        "completed": 7,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      }
+    ],
+    "references": [
+      {
+        "source_path": "SKILL.md",
+        "line": 9,
+        "column": 75,
+        "evidence": "Reproduce the validated workflow summarized in [references/workflow.json](references/workflow.json).",
+        "target_path": "references/workflow.json",
+        "status": "resolved",
+        "disposition": "analyzed",
+        "reference_kind": "markdown_link"
+      },
+      {
+        "source_path": "SKILL.md",
+        "line": 9,
+        "column": 49,
+        "evidence": "Reproduce the validated workflow summarized in [references/workflow.json](references/workflow.json).",
+        "target_path": "references/workflow.json",
+        "status": "resolved",
+        "disposition": "analyzed",
+        "reference_kind": "plain_path"
+      },
+      {
+        "source_path": "SKILL.md",
+        "line": 15,
+        "column": 39,
+        "evidence": "- [references/planogram-bay-A12.json](references/planogram-bay-A12.json)",
+        "target_path": "references/planogram-bay-A12.json",
+        "status": "resolved",
+        "disposition": "analyzed",
+        "reference_kind": "markdown_link"
+      },
+      {
+        "source_path": "SKILL.md",
+        "line": 15,
+        "column": 4,
+        "evidence": "- [references/planogram-bay-A12.json](references/planogram-bay-A12.json)",
+        "target_path": "references/planogram-bay-A12.json",
+        "status": "resolved",
+        "disposition": "analyzed",
+        "reference_kind": "plain_path"
+      },
+      {
+        "source_path": "SKILL.md",
+        "line": 16,
+        "column": 32,
+        "evidence": "- [references/sku-master.json](references/sku-master.json)",
+        "target_path": "references/sku-master.json",
+        "status": "resolved",
+        "disposition": "analyzed",
+        "reference_kind": "markdown_link"
+      },
+      {
+        "source_path": "SKILL.md",
+        "line": 16,
+        "column": 4,
+        "evidence": "- [references/sku-master.json](references/sku-master.json)",
+        "target_path": "references/sku-master.json",
+        "status": "resolved",
+        "disposition": "analyzed",
+        "reference_kind": "plain_path"
+      },
+      {
+        "source_path": "SKILL.md",
+        "line": 36,
+        "column": 20,
+        "evidence": "1. **\u52a0\u8f7d\u95e8\u5e97\u8d44\u6599** \u2014 \u8bfb\u53d6 references/planogram-bay-A12.json \u4e0e references/sku-master.json\uff1b\u7167\u7247\u4e0d\u662f A12 \u8d27\u67b6\u6216\u8d44\u6599\u7f3a\u5931\u65f6\u505c\u6b62\u5e76\u8bf4\u660e\u3002",
+        "target_path": "references/planogram-bay-A12.json",
+        "status": "resolved",
+        "disposition": "analyzed",
+        "reference_kind": "plain_path"
+      },
+      {
+        "source_path": "SKILL.md",
+        "line": 36,
+        "column": 56,
+        "evidence": "1. **\u52a0\u8f7d\u95e8\u5e97\u8d44\u6599** \u2014 \u8bfb\u53d6 references/planogram-bay-A12.json \u4e0e references/sku-master.json\uff1b\u7167\u7247\u4e0d\u662f A12 \u8d27\u67b6\u6216\u8d44\u6599\u7f3a\u5931\u65f6\u505c\u6b62\u5e76\u8bf4\u660e\u3002",
+        "target_path": "references/sku-master.json",
+        "status": "resolved",
+        "disposition": "analyzed",
+        "reference_kind": "plain_path"
+      },
+      {
+        "source_path": "SKILL.md",
+        "line": 63,
+        "column": 9,
+        "evidence": "python3 scripts/run.py --input /absolute/path/to/input --output-dir /absolute/path/to/output",
+        "target_path": "scripts/run.py",
+        "status": "resolved",
+        "disposition": "analyzed",
+        "reference_kind": "plain_path"
+      }
+    ],
+    "limitations": [],
+    "findings_before_filtering": 5,
+    "findings_after_filtering": 5
+  }
+}

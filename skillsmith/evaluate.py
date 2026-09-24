@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any, Callable
 
@@ -86,7 +87,12 @@ def load_scorer(skill_root: Path) -> Callable[[dict[str, Any], dict[str, Any]], 
     if module_spec is None or module_spec.loader is None:
         raise ValueError(f"cannot load scorer: {path}")
     module = importlib.util.module_from_spec(module_spec)
-    module_spec.loader.exec_module(module)
+    # Never leave compiled bytecode inside a skill that is about to be signed and shipped.
+    previous, sys.dont_write_bytecode = sys.dont_write_bytecode, True
+    try:
+        module_spec.loader.exec_module(module)
+    finally:
+        sys.dont_write_bytecode = previous
     if not callable(getattr(module, "score", None)):
         raise ValueError(f"scorer must define score(output, ground_truth): {path}")
     return module.score

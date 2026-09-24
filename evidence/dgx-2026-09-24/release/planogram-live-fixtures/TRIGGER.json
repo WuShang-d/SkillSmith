@@ -1,0 +1,547 @@
+{
+  "method": "agent-router",
+  "endpoint": "http://127.0.0.1:8000/v1",
+  "model": "Qwen/Qwen3.6-35B-A3B",
+  "repeats": 3,
+  "temperature": 0.7,
+  "catalogue": [
+    "accelerated-computing-cudf",
+    "cuopt-routing-api-python",
+    "inventory-replenishment",
+    "local-pedestrian-detector",
+    "marketing-copywriter",
+    "planogram-compliance",
+    "rag-blueprint",
+    "retail-shelf-audit",
+    "tao-generate-image-grounding",
+    "vss-ask-video",
+    "vss-summarize-video"
+  ],
+  "runs": 36,
+  "accuracy": 1.0,
+  "false_negative_rate": 0.0,
+  "false_positive_rate": 0.0,
+  "per_case": {
+    "within-tolerance": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "tea-oos-water-misplaced": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "cola-low-chips-oos": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "mixed-deviations": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "fully-compliant": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "cola-oos-tea-low": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "trigger-replenish-priority": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "trigger-planogram-en": {
+      "should_trigger": true,
+      "triggered": 3,
+      "runs": 3,
+      "selected": [
+        "planogram-compliance"
+      ]
+    },
+    "negative-count-only": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "retail-shelf-audit"
+      ]
+    },
+    "negative-replenish-db": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None",
+        "inventory-replenishment"
+      ]
+    },
+    "negative-poster": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "marketing-copywriter"
+      ]
+    },
+    "negative-face": {
+      "should_trigger": false,
+      "triggered": 0,
+      "runs": 3,
+      "selected": [
+        "None"
+      ]
+    }
+  },
+  "details": [
+    {
+      "case_id": "within-tolerance",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.417
+    },
+    {
+      "case_id": "within-tolerance",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.414
+    },
+    {
+      "case_id": "within-tolerance",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.414
+    },
+    {
+      "case_id": "tea-oos-water-misplaced",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.417
+    },
+    {
+      "case_id": "tea-oos-water-misplaced",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.42
+    },
+    {
+      "case_id": "tea-oos-water-misplaced",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.418
+    },
+    {
+      "case_id": "cola-low-chips-oos",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.415
+    },
+    {
+      "case_id": "cola-low-chips-oos",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.414
+    },
+    {
+      "case_id": "cola-low-chips-oos",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.416
+    },
+    {
+      "case_id": "mixed-deviations",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.413
+    },
+    {
+      "case_id": "mixed-deviations",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.412
+    },
+    {
+      "case_id": "mixed-deviations",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.413
+    },
+    {
+      "case_id": "fully-compliant",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.413
+    },
+    {
+      "case_id": "fully-compliant",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.413
+    },
+    {
+      "case_id": "fully-compliant",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.413
+    },
+    {
+      "case_id": "cola-oos-tea-low",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.417
+    },
+    {
+      "case_id": "cola-oos-tea-low",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.416
+    },
+    {
+      "case_id": "cola-oos-tea-low",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.418
+    },
+    {
+      "case_id": "trigger-replenish-priority",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.42
+    },
+    {
+      "case_id": "trigger-replenish-priority",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.42
+    },
+    {
+      "case_id": "trigger-replenish-priority",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.419
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 1,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.417
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 2,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.418
+    },
+    {
+      "case_id": "trigger-planogram-en",
+      "attempt": 3,
+      "should_trigger": true,
+      "triggered": true,
+      "selected_skill": "planogram-compliance",
+      "read_paths": [
+        "/workspace/skills/planogram-compliance/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.419
+    },
+    {
+      "case_id": "negative-count-only",
+      "attempt": 1,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.482
+    },
+    {
+      "case_id": "negative-count-only",
+      "attempt": 2,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.482
+    },
+    {
+      "case_id": "negative-count-only",
+      "attempt": 3,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "retail-shelf-audit",
+      "read_paths": [
+        "/workspace/skills/retail-shelf-audit/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.484
+    },
+    {
+      "case_id": "negative-replenish-db",
+      "attempt": 1,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "没有匹配到技能。",
+      "elapsed_seconds": 0.453
+    },
+    {
+      "case_id": "negative-replenish-db",
+      "attempt": 2,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "没有可用的技能。",
+      "elapsed_seconds": 0.421
+    },
+    {
+      "case_id": "negative-replenish-db",
+      "attempt": 3,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "inventory-replenishment",
+      "read_paths": [
+        "/workspace/skills/inventory-replenishment/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.416
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 1,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "marketing-copywriter",
+      "read_paths": [
+        "/workspace/skills/marketing-copywriter/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.385
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 2,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "marketing-copywriter",
+      "read_paths": [
+        "/workspace/skills/marketing-copywriter/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.381
+    },
+    {
+      "case_id": "negative-poster",
+      "attempt": 3,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": "marketing-copywriter",
+      "read_paths": [
+        "/workspace/skills/marketing-copywriter/SKILL.md"
+      ],
+      "reply_preview": "",
+      "elapsed_seconds": 1.382
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 1,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "我无法执行此请求。我的安全准则禁止我识别、推断或评论个人的身份、年龄、国籍、性别或意图。\n\n不过，如果您需要，我可以帮您分析 A12 货架的陈列情况（如缺货、错放或陈列合规性），或者统计货架上的商品排面情况。",
+      "elapsed_seconds": 2.312
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 2,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "我无法识别或推断任何人的年龄、身份或人口特征。\n\n不过，如果您需要，我可以帮您分析 A12 货架的陈列情况（如缺货、错放等），或者检测照片中是否有行人及其位置。请问您需要这些服务吗？",
+      "elapsed_seconds": 1.962
+    },
+    {
+      "case_id": "negative-face",
+      "attempt": 3,
+      "should_trigger": false,
+      "triggered": false,
+      "selected_skill": null,
+      "read_paths": [],
+      "reply_preview": "我无法识别或推断顾客的身份、年龄、国籍或意图。这是为了保护每个人的隐私。\n\n不过，如果您需要，我可以帮您：\n\n1. **检测货架前的行人**：我可以检测图片中是否有人站在 A12 货架前，并给出他们的位置框。\n2. **检查 A12 货架陈列合规**：如果您想检查 A12 货架是否符合陈列图（planogram），我可以分析货架上的商品陈列情况。\n\n请问您需要哪种帮助？",
+      "elapsed_seconds": 3.497
+    }
+  ]
+}

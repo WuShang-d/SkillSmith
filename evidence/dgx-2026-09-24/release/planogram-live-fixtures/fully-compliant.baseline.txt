@@ -1,0 +1,71 @@
+```json
+{
+  "bay_id": "A12",
+  "items": [
+    {
+      "shelf": 1,
+      "sku_code": "RED_CAN",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "BLUE_BOTTLE",
+      "observed_facings": 7,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "GREEN_BOX",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "YELLOW_BAG",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "RED_CAN",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "GREEN_BOX",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "GREEN_BOX",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "BLUE_BOTTLE",
+      "observed_facings": 6,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "YELLOW_BAG",
+      "observed_facings": 2,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "RED_CAN",
+      "observed_facings": 3,
+      "status": "OK"
+    }
+  ],
+  "uncertainties": [
+    "无法确定具体的 SKU 代码，因为缺少价格标签。",
+    "无法确定每个 SKU 的准确计划陈列面数，因此无法判断是否符合 planogram。"
+  ]
+}
+```

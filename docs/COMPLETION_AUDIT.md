@@ -6,7 +6,10 @@ This file tracks evidence against the actual competition objective. A checked it
 | --- | --- | --- |
 | Generate an installable Agent Skill from a successful workflow | Verified locally | `skillsmith/forge.py`; `scripts/verify.sh` |
 | Explicit positive and negative trigger boundaries | Verified locally | example `workflow.json` (6 positive, 6 negative incl. near misses) |
-| Security gate blocks high-risk patterns before installation | Verified locally | `skillsmith/security.py`; `test_scanner_blocks_secret` |
+| Security gate blocks high-risk patterns before installation | Verified on DGX with NVIDIA SkillSpector 2.12.0 plus SkillSmith rules | `skillsmith/security.py`; `evidence/dgx-2026-09-24/release/` |
+| SkillSpector findings on generated skills resolved | Verified: score 100 / DO_NOT_INSTALL → 3 / one LOW advisory | `release/skillspector-before-hardening.json`, `release/SECURITY_REPORT.json` |
+| Skill card with NVIDIA sections and release evidence | Verified | `skillsmith/card.py`; `test_skill_card_follows_nvidia_sections` |
+| Signed release (`skill.oms.sig`), verified on install, tamper refused | Verified on DGX with OpenSSF model-signing 1.1.1 and a local root CA | `skillsmith/sign.py`; `scripts/init-signing-pki.sh`; demo step 4/4 |
 | A/B evaluation of baseline versus with-Skill output | Verified; baseline now receives the same output format | `baseline_system` in `skillsmith/endpoint.py`; `test_live_capture_writes_baseline_and_skill_evidence` |
 | Correctness scored against ground truth, not field names | Verified | `examples/retail-shelf-audit/scorer.py`; `ground_truth` in `workflow.json`; `test_scorer_penalises_stacked_units_and_tote_items` |
 | Capture real A/B outputs from the same DGX-local model | Verified on DGX; **skill shows no gain (82.7% → 82.3%), install blocked** | `evidence/dgx-2026-09-23/` |
@@ -16,10 +19,10 @@ This file tracks evidence against the actual competition objective. A checked it
 | Replay with a new input on DGX multimodal inference | Verified on DGX | `evidence/dgx-2026-09-20/replay/result.json`; exact required fields validated by the runner |
 | Non-technical browser workflow | Verified locally in a real browser | `skillsmith/web.py`; browser result showed PASS/READY |
 | End-to-end duration under 10 minutes on DGX | Verified: 182 s for forge → scan → A/B → 60 router trigger runs | `evidence/dgx-2026-09-23/` (the OpenClaw trigger pass is separate, ~70 s per agent run) |
-| A skill that passes the fair gate | Verified on DGX: `planogram-compliance` 81.4% vs pasted data 72.6% vs baseline 11.1% | `evidence/dgx-2026-09-24/planogram-compliance/` |
-| Skill beats simply pasting its reference data | Verified on DGX (+8.8 pts, fewer tokens, lower latency) | same; gate rule in `evaluate_fixtures` |
+| A skill that passes the fair gate | Verified on DGX: released `planogram-compliance` 78.4% vs pasted data 72.6% vs baseline 11.1% (81.4% before the security hardening changed SKILL.md) | `evidence/dgx-2026-09-24/planogram-compliance/` |
+| Skill beats simply pasting its reference data | Verified on DGX (+5.8 pts; 18.7 s / 568 tokens vs 24.2 s / 748) | `evidence/dgx-2026-09-24/release/`; gate rule in `evaluate_fixtures` |
 | Replay on a held-out input, scored | Verified on DGX: 3/3 real deviations found, 1 false LOW, task score 88.6% | `evidence/dgx-2026-09-24/planogram-compliance/replay/` |
-| Roadshow shows the gate blocking and shipping | Rehearsed on DGX end to end in 580 s | `evidence/dgx-2026-09-24/demo-rehearsal.log` |
+| Roadshow shows the gate blocking and shipping | Rehearsed on DGX end to end in 572 s, incl. SkillSpector, signing and tamper refusal | `evidence/dgx-2026-09-24/release/demo-dgx.log` |
 | Reusable SkillSmith skill package | Verified structurally | `skills-src/skillsmith`; `quick_validate.py` |
 | Stable roadshow narrative and fallback | Technically rehearsed on DGX | Two complete `scripts/demo-dgx.sh` runs; final evidence snapshot and `docs/ROADSHOW.md` |
 

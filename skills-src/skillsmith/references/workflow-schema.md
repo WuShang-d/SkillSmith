@@ -34,6 +34,6 @@ When ground truth exists, the release gate uses the task score (correctness agai
 
 For live DGX capture, every positive case also needs `input`, resolved beneath the explicitly selected input root. Relative paths cannot escape that root.
 
-Optional fields include `display_name` and `license`.
+Optional fields include `display_name`, `license`, `owner`, `version` and `deployment_geography`; they feed the generated `skill-card.md`.
 
 Never place credentials in the workflow JSON. Generated runners read endpoint configuration from `OPENAI_BASE_URL`, `OPENAI_MODEL`, and `OPENAI_API_KEY` at runtime.

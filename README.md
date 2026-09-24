@@ -107,6 +107,29 @@ python3 -m skillsmith.cli trigger-eval GENERATED/retail-shelf-audit --output bui
   --harness openclaw --input-root examples/retail-shelf-audit                                        # full OpenClaw agent turns
 ```
 
+## Release chain: scanned, evaluated, documented, signed
+
+Mirroring NVIDIA's Verified Skills (Scanned · Evaluated · Signed · Documented)
+for an organisation's own skills, entirely on the DGX:
+
+```bash
+./scripts/setup-release-tools-dgx.sh     # NVIDIA SkillSpector + OpenSSF model-signing in a Python 3.12 venv
+./scripts/init-signing-pki.sh            # local root CA + code-signing certificate, keys kept in ~/.skillsmith-pki
+python3 -m skillsmith.cli live-pipeline WORKFLOW.json ... --require-skillspector --pki-dir ~/.skillsmith-pki
+```
+
+1. **Scanned** — SkillSmith's rules plus NVIDIA SkillSpector (`--no-llm` static pass); a
+   `DO_NOT_INSTALL` recommendation or a fired gate blocks the release.
+2. **Evaluated** — fair A/B against ground truth and real-agent triggering (below).
+3. **Documented** — `skill-card.md` with NVIDIA's skill card sections plus the measured release evidence.
+4. **Signed** — `skill.oms.sig` over the whole directory; `install` verifies it before and after copying,
+   and `python3 -m skillsmith.cli verify SKILL --certificate-chain root-cert.pem` checks any copy.
+
+SkillSpector found real problems in the skills SkillSmith originally generated (score 100, `DO_NOT_INSTALL`):
+the runner forwarded `OPENAI_API_KEY` to the network, a compiled `.pyc` was left in the skill, and no tool
+scope was declared. The runner now has a fixed loopback destination, reads no environment variables and
+declares its permissions; the same scan scores 3 (one LOW advisory to review the declared permissions).
+
 ## Verified DGX results: one skill blocked, one shipped
 
 Fair A/B on the competition DGX Spark (Qwen3.6-35B-A3B): all conditions get
@@ -117,11 +140,12 @@ pasting that data into a generic prompt.
 | Skill | Baseline | Pasted data | With skill | Triggering | Gate |
 | --- | ---: | ---: | ---: | --- | --- |
 | `retail-shelf-audit` | 82.7% | – | 82.3% | OpenClaw 36/36 | **BLOCKED** |
-| `planogram-compliance` | 11.1% | 72.6% | 81.4% | OpenClaw 35/36 | **PASS → installed** |
+| `planogram-compliance` | 11.1% | 72.6% | 78.4% | OpenClaw 35/36 | **PASS → signed, installed** |
 
 On a held-out photo the installed planogram skill found all three real
 deviations with one false LOW (task score 88.6%). `./scripts/demo-dgx.sh` runs
 the whole blocked → shipped → replay flow. Evidence: `evidence/dgx-2026-09-23/`
-(retail) and `evidence/dgx-2026-09-24/` (planogram). The earlier
+(retail) and `evidence/dgx-2026-09-24/` (planogram; `release/` holds the signed skill and its public
+root certificate — verify it with `python3 -m skillsmith.cli verify evidence/dgx-2026-09-24/release/planogram-compliance-signed --certificate-chain evidence/dgx-2026-09-24/release/root-cert.pem`). The earlier
 "23.6% → 100%" figure (`evidence/dgx-2026-09-20/`) is superseded: that
 baseline was never told the output format.

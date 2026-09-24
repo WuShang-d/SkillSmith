@@ -4,6 +4,8 @@
   "display_name": "零售货架巡检",
   "description": "Inspect a retail shelf photo and return front-row SKU facings per shelf, empty gaps, image quality, and uncertainties as structured JSON.",
   "license": "Apache-2.0",
+  "owner": "Store Operations, SkillSmith Demo Org (demo owner)",
+  "version": "1.0.0",
   "successful_run_summary": "A local multimodal model audited a shelf photo shelf by shelf, counted only front-row facings, ignored products outside the shelf, marked empty gaps, and separated occluded areas into uncertainties.",
   "triggers": [
     "审计或巡检一张零售货架照片",
@@ -65,16 +67,73 @@
       "prompt": "请审计这张零售货架照片，统计各 SKU 排面并标出空位，返回 JSON。",
       "input": "shelf-clear.png",
       "should_trigger": true,
-      "expected_contains": ["image_quality", "sku_facings", "empty_gaps", "uncertainties"],
-      "forbidden_contains": ["customer_identity", "api_key"],
+      "expected_contains": [
+        "image_quality",
+        "sku_facings",
+        "empty_gaps",
+        "uncertainties"
+      ],
+      "forbidden_contains": [
+        "customer_identity",
+        "api_key"
+      ],
       "ground_truth": {
         "facings": {
-          "1": {"red_can": [7, 7], "blue_bottle": [7, 7], "green_box": [6, 6]},
-          "2": {"yellow_pouch": [4, 4], "red_can": [5, 5], "blue_bottle": [3, 4]},
-          "3": {"green_box": [5, 5], "blue_bottle": [6, 6], "yellow_pouch": [3, 3], "red_can": [3, 3]}
+          "1": {
+            "red_can": [
+              7,
+              7
+            ],
+            "blue_bottle": [
+              7,
+              7
+            ],
+            "green_box": [
+              6,
+              6
+            ]
+          },
+          "2": {
+            "yellow_pouch": [
+              4,
+              4
+            ],
+            "red_can": [
+              5,
+              5
+            ],
+            "blue_bottle": [
+              3,
+              4
+            ]
+          },
+          "3": {
+            "green_box": [
+              5,
+              5
+            ],
+            "blue_bottle": [
+              6,
+              6
+            ],
+            "yellow_pouch": [
+              3,
+              3
+            ],
+            "red_can": [
+              3,
+              3
+            ]
+          }
         },
         "gaps": [
-          {"shelf": 2, "positions": ["center", "right"]}
+          {
+            "shelf": 2,
+            "positions": [
+              "center",
+              "right"
+            ]
+          }
         ],
         "occluded_shelves": []
       }
@@ -84,18 +143,71 @@
       "prompt": "巡检这张有遮挡的货架图片，给出可见排面和不确定项。",
       "input": "shelf-occluded.png",
       "should_trigger": true,
-      "expected_contains": ["image_quality", "sku_facings", "uncertainties"],
-      "forbidden_contains": ["customer_identity", "api_key"],
+      "expected_contains": [
+        "image_quality",
+        "sku_facings",
+        "uncertainties"
+      ],
+      "forbidden_contains": [
+        "customer_identity",
+        "api_key"
+      ],
       "ground_truth": {
         "facings": {
-          "1": {"red_can": [8, 8], "blue_bottle": [5, 5], "green_box": [4, 4]},
-          "2": {"green_box": [5, 5], "yellow_pouch": [5, 5], "red_can": [5, 5]},
-          "3": {"blue_bottle": [4, 5], "green_box": [1, 5], "yellow_pouch": [3, 5]}
+          "1": {
+            "red_can": [
+              8,
+              8
+            ],
+            "blue_bottle": [
+              5,
+              5
+            ],
+            "green_box": [
+              4,
+              4
+            ]
+          },
+          "2": {
+            "green_box": [
+              5,
+              5
+            ],
+            "yellow_pouch": [
+              5,
+              5
+            ],
+            "red_can": [
+              5,
+              5
+            ]
+          },
+          "3": {
+            "blue_bottle": [
+              4,
+              5
+            ],
+            "green_box": [
+              1,
+              5
+            ],
+            "yellow_pouch": [
+              3,
+              5
+            ]
+          }
         },
         "gaps": [
-          {"shelf": 1, "positions": ["right"]}
+          {
+            "shelf": 1,
+            "positions": [
+              "right"
+            ]
+          }
         ],
-        "occluded_shelves": [3]
+        "occluded_shelves": [
+          3
+        ]
       }
     },
     {

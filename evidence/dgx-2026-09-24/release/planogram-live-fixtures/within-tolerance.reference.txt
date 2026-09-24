@@ -1,0 +1,71 @@
+```json
+{
+  "bay_id": "A12",
+  "items": [
+    {
+      "shelf": 1,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 6,
+      "status": "LOW"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "WAT-550",
+      "observed_facings": 5,
+      "status": "OK"
+    },
+    {
+      "shelf": 1,
+      "sku_code": "TEA-250",
+      "observed_facings": 5,
+      "status": "LOW"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "CHP-070",
+      "observed_facings": 3,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 2,
+      "sku_code": "TEA-250",
+      "observed_facings": 3,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "TEA-250",
+      "observed_facings": 4,
+      "status": "OK"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "WAT-550",
+      "observed_facings": 5,
+      "status": "LOW"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "CHP-070",
+      "observed_facings": 2,
+      "status": "MISPLACED"
+    },
+    {
+      "shelf": 3,
+      "sku_code": "BEV-COLA-330",
+      "observed_facings": 2,
+      "status": "LOW"
+    }
+  ],
+  "uncertainties": [
+    "Shelf 3: The planogram specifies TEA-250, then WAT-550, then CHP-070. The image shows TEA-250, then WAT-550, then CHP-070, then BEV-COLA-330. The CHP-070 is in the correct position relative to the planogram's sequence, but the BEV-COLA-330 is in the final slot, which is correct. However, the CHP-070 is a pouch and the BEV-COLA-330 is a can, so their physical placement is distinct. The main issue is the SKU order on shelf 3. The planogram is TEA-250, WAT-550, CHP-070, BEV-COLA-330. The image is TEA-250, WAT-550, CHP-070, BEV-COLA-330. The order is correct. The status for CHP-070 is MISPLACED because it is a pouch, not a can, and the planogram might imply a different type of product in that slot, but based on the provided visual reference, it is correctly placed. Let's re-evaluate. The planogram for shelf 3 is TEA-250, WAT-550, CHP-070, BEV-COLA-330. The image shows TEA-250, WAT-550, CHP-070, BEV-COLA-330. The order is correct. The status for CHP-070 should be OK. The status for BEV-COLA-330 is LOW (2 facings vs 3 target). The status for WAT-550 is LOW (5 facings vs 6 target). The status for TEA-250 is OK (4 facings vs 5 target).",
+    "Shelf 1: The planogram specifies BEV-COLA-330, WAT-550, TEA-250. The image shows BEV-COLA-330, WAT-550, TEA-250. The order is correct. The status for BEV-COLA-330 is LOW (6 facings vs 7 target). The status for WAT-550 is OK (5 facings vs 7 target, but min is 5). The status for TEA-250 is LOW (5 facings vs 6 target)."
+  ]
+}
+```

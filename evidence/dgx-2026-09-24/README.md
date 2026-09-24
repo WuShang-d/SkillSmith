@@ -48,6 +48,39 @@ OOS) plus one false LOW (tea 5 facings, min 4). Task score 88.6%.
 numbers and the held-out replay reproduced exactly; the retail skill tied
 (82.7% vs 82.7%) and was blocked again, since the gate requires a strict gain.
 
+## Release chain (final run, `release/`)
+
+The released skill differs from the A/B above only in SKILL.md: after
+SkillSpector flagged the originally generated skill (score 100,
+`DO_NOT_INSTALL`: `OPENAI_API_KEY` sent to the network, a compiled `.pyc` in the
+skill, no declared tool scope — `release/skillspector-before-hardening.json`), the
+runner got a fixed 127.0.0.1 destination, stopped reading environment variables,
+and SKILL.md declares `allowed-tools` and `permissions`. SkillSpector 2.12.0
+then scores it 3 (one LOW advisory asking to review the declared permissions).
+
+That SKILL.md change cost accuracy: final task score **78.4%** (status 87.1%,
+deviation F1 53.2%, facings 95.0%) vs pasted data 72.6% and baseline 11.1%;
+reproduced in two consecutive runs. Held-out replay unchanged at 88.6%.
+The OpenClaw trigger result (35/36) was measured before this change; the
+skill's `description`, which the agent routes on, is identical, but the
+frontmatter gained `allowed-tools` and `permissions` and was not re-run in OpenClaw.
+
+`release/demo-dgx.log`: full `scripts/demo-dgx.sh` in 572 s — retail blocked;
+planogram scanned, evaluated, carded, signed, verified and installed; replay
+scored; one-word tamper refused with "modified since signing:
+references/workflow.json". Also checked by hand: an added file fails ("Extra
+files found … scripts/post_install.sh"), and a copy re-signed by another CA
+fails against our root ("self-signed certificate in certificate chain").
+
+Verify the archived release yourself (needs `pip install model-signing`):
+
+```bash
+python3 -m skillsmith.cli verify evidence/dgx-2026-09-24/release/planogram-compliance-signed \
+  --certificate-chain evidence/dgx-2026-09-24/release/root-cert.pem
+```
+
+`root-cert.pem` is the public trust anchor; private keys never left `~/.skillsmith-pki` on the DGX.
+
 ## Files
 
 - `planogram-compliance/live-fixtures/` — CAPTURE.json, 18 raw outputs, router TRIGGER.json
