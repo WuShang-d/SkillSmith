@@ -4,7 +4,7 @@
 
 > 把 Agent 的一次成功，锻造成全公司都敢装的能力。
 
-- 演示视频：`<视频链接>`（约 2 分钟）
+- 演示视频：[B 站观看](https://www.bilibili.com/video/BV1HaaG6QE3f/)（约 2 分钟）
 - 应用领域：零售 / 批发（演示场景）；方法适用于任何"跑通过一次"的多模态 Agent 流程
 - 运行环境：NVIDIA DGX Spark（GB10）· Qwen3.6-35B-A3B · vLLM · OpenClaw · NVIDIA SkillSpector · OpenSSF model-signing
 

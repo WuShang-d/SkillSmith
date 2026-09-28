@@ -2,7 +2,7 @@
 
 **把 Agent 的一次成功，锻造成全公司都敢装的能力。** 第三届 NVIDIA DGX Spark Hackathon · Agent Skills 开发挑战赛参赛作品。
 
-- 演示视频：`<视频链接>`
+- 演示视频：[B 站观看](https://www.bilibili.com/video/BV1HaaG6QE3f/)
 - 项目报告书：[docs/REPORT.md](docs/REPORT.md) · 参赛历程：[docs/JOURNEY.md](docs/JOURNEY.md)
 - 在 DGX Spark 本地实测，同一道门禁拦下一个 Skill、放行一个：
 
